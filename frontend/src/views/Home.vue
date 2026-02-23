@@ -84,7 +84,8 @@
         <div class="about-content">
           <div class="about-image">
             <div class="image-frame">
-              <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=500&fit=crop" alt="Crate" />
+              <!-- Replace with your actual image path: /images/crate-guitar.jpg -->
+              <img src="/images/crate-guitar.jpg" alt="Crate playing guitar" />
               <div class="frame-accent"></div>
             </div>
           </div>
@@ -138,11 +139,12 @@
         </div>
 
         <div class="bands-grid">
-          <div v-for="band in bands" :key="band.name" class="band-card" @click="openBandLink(band.link)">
+          <div v-for="(band, index) in bands" :key="band.name" class="band-card" @click="toggleBandDropdown(index)">
             <div class="band-image">
               <img :src="band.image" :alt="band.name" />
               <div class="band-overlay">
-                <i class="fas fa-play-circle"></i>
+                <i class="fas fa-headphones"></i>
+                <span>Listen</span>
               </div>
             </div>
             <div class="band-info">
@@ -150,28 +152,65 @@
               <span class="band-role">{{ band.role }}</span>
               <p class="band-genre">{{ band.genre }}</p>
             </div>
+            
+            <!-- Streaming Dropdown -->
+            <div class="band-dropdown" :class="{ active: activeBandDropdown === index }" @click.stop>
+              <div class="dropdown-header">
+                <span>Stream {{ band.name }}</span>
+                <button class="dropdown-close" @click.stop="activeBandDropdown = null">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+              <div class="dropdown-links">
+                <a v-if="band.spotify" :href="band.spotify" target="_blank" class="dropdown-link spotify">
+                  <i class="fab fa-spotify"></i>
+                  <span>Spotify</span>
+                </a>
+                <a v-if="band.appleMusic" :href="band.appleMusic" target="_blank" class="dropdown-link apple">
+                  <i class="fab fa-apple"></i>
+                  <span>Apple Music</span>
+                </a>
+                <a v-if="band.youtube" :href="band.youtube" target="_blank" class="dropdown-link youtube">
+                  <i class="fab fa-youtube"></i>
+                  <span>YouTube</span>
+                </a>
+                <a v-if="band.youtubeMusic" :href="band.youtubeMusic" target="_blank" class="dropdown-link youtube-music">
+                  <i class="fas fa-music"></i>
+                  <span>YouTube Music</span>
+                </a>
+              </div>
+            </div>
           </div>
         </div>
 
         <div class="music-platforms">
           <h4>Listen on</h4>
           <div class="platform-links">
-            <a href="#" class="platform-link spotify">
-              <i class="fab fa-spotify"></i>
-              <span>Spotify</span>
-            </a>
-            <a href="#" class="platform-link apple">
-              <i class="fab fa-apple"></i>
-              <span>Apple Music</span>
-            </a>
-            <a href="#" class="platform-link youtube">
-              <i class="fab fa-youtube"></i>
-              <span>YouTube</span>
-            </a>
-            <a href="#" class="platform-link soundcloud">
-              <i class="fab fa-soundcloud"></i>
-              <span>SoundCloud</span>
-            </a>
+            <div class="platform-dropdown" v-for="platform in streamingPlatforms" :key="platform.name">
+              <button 
+                class="platform-link" 
+                :class="platform.class"
+                @click="togglePlatformDropdown(platform.name)"
+              >
+                <i :class="platform.icon"></i>
+                <span>{{ platform.name }}</span>
+                <i class="fas fa-chevron-down dropdown-arrow" :class="{ rotated: activePlatformDropdown === platform.name }"></i>
+              </button>
+              
+              <div class="platform-submenu" :class="{ active: activePlatformDropdown === platform.name }">
+                <a 
+                  v-for="band in bands" 
+                  :key="band.name"
+                  :href="band[platform.key]"
+                  target="_blank"
+                  class="submenu-item"
+                  v-if="band[platform.key]"
+                >
+                  <img :src="band.image" :alt="band.name" class="submenu-img" />
+                  <span>{{ band.name }}</span>
+                </a>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -321,32 +360,77 @@ export default {
       lightboxOpen: false,
       lightboxIndex: 0,
       showUploadModal: false,
+      activeBandDropdown: null,
+      activePlatformDropdown: null,
       newPhoto: {
         src: '',
         caption: '',
         category: 'gigs'
       },
+      
+      /**
+       * =====================================================
+       * 🎵 STREAMING PLATFORMS - These appear in "Listen on" section
+       * =====================================================
+       */
+      streamingPlatforms: [
+        { name: 'Spotify', icon: 'fab fa-spotify', class: 'spotify', key: 'spotify' },
+        { name: 'Apple Music', icon: 'fab fa-apple', class: 'apple', key: 'appleMusic' },
+        { name: 'YouTube', icon: 'fab fa-youtube', class: 'youtube', key: 'youtube' },
+        { name: 'YouTube Music', icon: 'fas fa-music', class: 'youtube-music', key: 'youtubeMusic' }
+      ],
+      
+      /**
+       * =====================================================
+       * 🎸 YOUR BANDS - EDIT YOUR BAND INFO HERE
+       * =====================================================
+       * 
+       * HOW TO UPDATE:
+       * 
+       * 1. Replace 'YOUR BAND 1 NAME' with your actual band name
+       * 2. Update the role (e.g., 'Lead Guitarist', 'Bassist', etc.)
+       * 3. Update the genre
+       * 4. Replace the image URL with your band's image
+       *    - Put images in /frontend/public/images/
+       *    - Use path like '/images/band1.jpg'
+       * 5. Add your streaming links for each platform
+       * 
+       * IMPORTANT: Leave empty string '' if platform not available
+       * =====================================================
+       */
       bands: [
         {
-          name: 'Band Name 1',
-          role: 'Lead Guitarist',
-          genre: 'Indie Rock',
-          image: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop',
-          link: '#'
+          name: 'YOUR BAND 1 NAME',      // <-- Replace with Band 1 name
+          role: 'Lead Guitarist',         // <-- Your role in the band
+          genre: 'Indie Rock',            // <-- Genre
+          image: '/images/band1.jpg',     // <-- Band image (put in /public/images/)
+          // Streaming links - replace with your actual links
+          spotify: 'https://open.spotify.com/artist/YOUR_ARTIST_ID',
+          appleMusic: 'https://music.apple.com/artist/YOUR_ARTIST_ID',
+          youtube: 'https://youtube.com/@YOUR_CHANNEL',
+          youtubeMusic: 'https://music.youtube.com/channel/YOUR_CHANNEL_ID'
         },
         {
-          name: 'Band Name 2',
-          role: 'Bassist / Vocals',
-          genre: 'Alternative',
-          image: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=400&h=400&fit=crop',
-          link: '#'
+          name: 'YOUR BAND 2 NAME',      // <-- Replace with Band 2 name
+          role: 'Bassist / Vocals',       // <-- Your role
+          genre: 'Alternative',           // <-- Genre
+          image: '/images/band2.jpg',     // <-- Band image
+          // Streaming links
+          spotify: 'https://open.spotify.com/artist/YOUR_ARTIST_ID',
+          appleMusic: 'https://music.apple.com/artist/YOUR_ARTIST_ID',
+          youtube: 'https://youtube.com/@YOUR_CHANNEL',
+          youtubeMusic: 'https://music.youtube.com/channel/YOUR_CHANNEL_ID'
         },
         {
-          name: 'Solo Project',
-          role: 'Producer',
-          genre: 'Electronic',
-          image: 'https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?w=400&h=400&fit=crop',
-          link: '#'
+          name: 'SOLO PROJECT',          // <-- Your solo project name
+          role: 'Producer',               // <-- Role
+          genre: 'Electronic',            // <-- Genre
+          image: '/images/solo.jpg',      // <-- Cover image
+          // Streaming links
+          spotify: 'https://open.spotify.com/artist/YOUR_ARTIST_ID',
+          appleMusic: '',                 // Leave empty if not available
+          youtube: 'https://youtube.com/@YOUR_CHANNEL',
+          youtubeMusic: ''
         }
       ],
       skillCategories: [
@@ -397,14 +481,9 @@ export default {
         { id: 'studio', name: 'Studio', icon: 'fas fa-microphone' },
         { id: 'life', name: 'Life', icon: 'fas fa-heart' }
       ],
-      gallery: [
-        { id: 1, src: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=600&h=600&fit=crop', caption: 'Live performance', category: 'gigs', size: 'large' },
-        { id: 2, src: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=400&h=400&fit=crop', caption: 'Studio session', category: 'studio', size: '' },
-        { id: 3, src: 'https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?w=400&h=400&fit=crop', caption: 'Behind the scenes', category: 'life', size: '' },
-        { id: 4, src: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=400&h=400&fit=crop', caption: 'Concert night', category: 'gigs', size: '' },
-        { id: 5, src: 'https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=600&h=600&fit=crop', caption: 'Recording vocals', category: 'studio', size: 'large' },
-        { id: 6, src: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=400&h=400&fit=crop', caption: 'Band practice', category: 'gigs', size: '' }
-      ]
+      // Gallery starts empty - photos are saved to localStorage
+      // Add photos using the "Add Photo" button
+      gallery: []
     }
   },
   computed: {
@@ -419,12 +498,25 @@ export default {
     if (savedGallery) {
       this.gallery = JSON.parse(savedGallery)
     }
+    
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', this.closeDropdowns)
+  },
+  beforeUnmount() {
+    document.removeEventListener('click', this.closeDropdowns)
   },
   methods: {
-    openBandLink(link) {
-      if (link && link !== '#') {
-        window.open(link, '_blank')
-      }
+    closeDropdowns() {
+      this.activeBandDropdown = null
+      this.activePlatformDropdown = null
+    },
+    toggleBandDropdown(index) {
+      this.activePlatformDropdown = null
+      this.activeBandDropdown = this.activeBandDropdown === index ? null : index
+    },
+    togglePlatformDropdown(name) {
+      this.activeBandDropdown = null
+      this.activePlatformDropdown = this.activePlatformDropdown === name ? null : name
     },
     openLightbox(index) {
       this.lightboxIndex = index
@@ -794,9 +886,10 @@ export default {
   background: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
-  overflow: hidden;
+  overflow: visible;
   cursor: pointer;
   transition: var(--transition-smooth);
+  position: relative;
 }
 
 .band-card:hover {
@@ -809,6 +902,7 @@ export default {
   position: relative;
   aspect-ratio: 1;
   overflow: hidden;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
 }
 
 .band-image img {
@@ -825,10 +919,12 @@ export default {
 .band-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.6);
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 8px;
   opacity: 0;
   transition: opacity 0.3s ease;
 }
@@ -838,8 +934,104 @@ export default {
 }
 
 .band-overlay i {
-  font-size: 4rem;
+  font-size: 2.5rem;
   color: var(--accent-primary);
+}
+
+.band-overlay span {
+  font-size: 0.9rem;
+  color: white;
+  font-weight: 500;
+}
+
+/* Band Dropdown */
+.band-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 0;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.3s ease;
+  z-index: 100;
+  box-shadow: var(--shadow-lg);
+}
+
+.band-dropdown.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(8px);
+}
+
+.dropdown-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.dropdown-header span {
+  font-weight: 500;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+}
+
+.dropdown-close {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-elevated);
+  border: none;
+  border-radius: 50%;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.dropdown-close:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.dropdown-links {
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+}
+
+.dropdown-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border-radius: var(--radius-md);
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.dropdown-link:hover {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+}
+
+.dropdown-link.spotify:hover { color: #1DB954; }
+.dropdown-link.apple:hover { color: #fc3c44; }
+.dropdown-link.youtube:hover { color: #FF0000; }
+.dropdown-link.youtube-music:hover { color: #FF0000; }
+
+.dropdown-link i {
+  font-size: 1.2rem;
+  width: 24px;
+  text-align: center;
 }
 
 .band-info {
@@ -885,6 +1077,22 @@ export default {
   flex-wrap: wrap;
 }
 
+.platform-link:hover {
+  color: var(--text-primary);
+  transform: translateY(-3px);
+}
+
+.platform-link.spotify:hover { border-color: #1DB954; color: #1DB954; }
+.platform-link.apple:hover { border-color: #fc3c44; color: #fc3c44; }
+.platform-link.youtube:hover { border-color: #FF0000; color: #FF0000; }
+.platform-link.youtube-music:hover { border-color: #FF0000; color: #FF0000; }
+.platform-link.soundcloud:hover { border-color: #ff5500; color: #ff5500; }
+
+/* Platform Dropdown */
+.platform-dropdown {
+  position: relative;
+}
+
 .platform-link {
   display: flex;
   align-items: center;
@@ -896,17 +1104,64 @@ export default {
   color: var(--text-secondary);
   font-size: 0.95rem;
   transition: var(--transition-base);
+  cursor: pointer;
 }
 
-.platform-link:hover {
+.dropdown-arrow {
+  font-size: 0.7rem;
+  margin-left: 4px;
+  transition: transform 0.3s ease;
+}
+
+.dropdown-arrow.rotated {
+  transform: rotate(180deg);
+}
+
+.platform-submenu {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 8px;
+  min-width: 200px;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  margin-bottom: 8px;
+  box-shadow: var(--shadow-lg);
+  z-index: 100;
+}
+
+.platform-submenu.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.submenu-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.submenu-item:hover {
+  background: var(--bg-elevated);
   color: var(--text-primary);
-  transform: translateY(-3px);
 }
 
-.platform-link.spotify:hover { border-color: #1DB954; color: #1DB954; }
-.platform-link.apple:hover { border-color: #fc3c44; color: #fc3c44; }
-.platform-link.youtube:hover { border-color: #FF0000; color: #FF0000; }
-.platform-link.soundcloud:hover { border-color: #ff5500; color: #ff5500; }
+.submenu-img {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  object-fit: cover;
+}
 
 /* Skills Section */
 .skills-section {

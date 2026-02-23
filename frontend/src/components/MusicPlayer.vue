@@ -1,12 +1,15 @@
 <template>
   <div class="music-player" :class="{ minimized: isMinimized }">
     <!-- Minimized View -->
-    <div v-if="isMinimized" class="player-mini" @click="isMinimized = false">
+    <div v-if="isMinimized" class="player-mini" @click="toggleMinimize">
       <div class="mini-album" :class="{ playing: isPlaying }">
         <img :src="currentTrack.cover" :alt="currentTrack.title" />
       </div>
       <div class="mini-equalizer" v-if="isPlaying">
         <span></span><span></span><span></span>
+      </div>
+      <div class="mini-play-btn" @click.stop="togglePlay">
+        <i :class="isPlaying ? 'fas fa-pause' : 'fas fa-play'"></i>
       </div>
     </div>
 
@@ -17,7 +20,7 @@
         <span class="player-label">
           <i class="fas fa-music"></i> Now Playing
         </span>
-        <button class="player-minimize" @click="isMinimized = true">
+        <button class="player-minimize" @click="toggleMinimize" title="Minimize">
           <i class="fas fa-minus"></i>
         </button>
       </div>
@@ -40,6 +43,7 @@
         <span class="time-current">{{ formatTime(currentTime) }}</span>
         <div class="player-progress" @click="seek">
           <div class="player-progress-bar" :style="{ width: progress + '%' }"></div>
+          <div class="player-progress-thumb" :style="{ left: progress + '%' }"></div>
         </div>
         <span class="time-total">{{ formatTime(duration) }}</span>
       </div>
@@ -76,6 +80,7 @@
       <button class="playlist-toggle" @click="showPlaylist = !showPlaylist">
         <i class="fas fa-list"></i>
         <span>Playlist ({{ playlist.length }})</span>
+        <i :class="showPlaylist ? 'fas fa-chevron-up' : 'fas fa-chevron-down'" style="margin-left: auto;"></i>
       </button>
 
       <!-- Playlist -->
@@ -90,9 +95,12 @@
           <img :src="track.cover" :alt="track.title" class="playlist-cover" />
           <div class="playlist-info">
             <span class="playlist-title">{{ track.title }}</span>
-            <span class="playlist-artist">{{ track.artist }}</span>
+            <span class="playlist-artist">{{ track.band || track.artist }}</span>
           </div>
-          <span class="playlist-duration">{{ track.duration }}</span>
+          <div class="playlist-playing" v-if="index === currentIndex && isPlaying">
+            <span></span><span></span><span></span>
+          </div>
+          <span v-else class="playlist-duration">{{ track.duration }}</span>
         </div>
       </div>
     </div>
@@ -104,6 +112,9 @@
       @timeupdate="updateTime"
       @loadedmetadata="onLoaded"
       @ended="nextTrack"
+      @canplay="onCanPlay"
+      @error="onError"
+      preload="metadata"
     ></audio>
   </div>
 </template>
@@ -122,31 +133,72 @@ export default {
       volume: 80,
       isMuted: false,
       previousVolume: 80,
-      // Sample playlist - Replace with your actual tracks
+      canPlay: false,
+      
+      /**
+       * =====================================================
+       * 🎵 YOUR PLAYLIST - EDIT YOUR SONGS HERE
+       * =====================================================
+       * 
+       * HOW TO ADD YOUR BAND'S MUSIC:
+       * 
+       * 1. Put your MP3 files in: /frontend/public/music/
+       *    Example: /frontend/public/music/band1-song1.mp3
+       * 
+       * 2. Add track info below with the path starting with /music/
+       *    Example: src: '/music/band1-song1.mp3'
+       * 
+       * 3. For cover images, put them in: /frontend/public/images/
+       *    Example: /frontend/public/images/band1-cover.jpg
+       * 
+       * TRACK OBJECT STRUCTURE:
+       * {
+       *   title: 'Song Title',           // Name of the song
+       *   artist: 'Artist/Band Name',    // Main artist
+       *   band: 'Your Band Name',        // Optional: Display band name
+       *   src: '/music/filename.mp3',    // Path to audio file
+       *   cover: '/images/cover.jpg',    // Path to album art
+       *   duration: '3:45'               // Display duration
+       * }
+       * =====================================================
+       */
       playlist: [
+        // ===== BAND 1 SONGS =====
         {
-          title: 'Demo Track 1',
-          artist: 'Crate Studio',
-          band: 'Your Band Name',
-          cover: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=200&h=200&fit=crop',
-          src: '',
+          title: 'Song Title 1',
+          artist: 'Crate Marshall',
+          band: 'YOUR BAND 1 NAME',
+          src: '/music/band1-song1.mp3',
+          cover: '/images/band1-cover.jpg',
           duration: '3:45'
         },
         {
-          title: 'Demo Track 2',
-          artist: 'Crate Studio',
-          band: 'Your Band Name',
-          cover: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=200&h=200&fit=crop',
-          src: '',
+          title: 'Song Title 2',
+          artist: 'Crate Marshall',
+          band: 'YOUR BAND 1 NAME',
+          src: '/music/band1-song2.mp3',
+          cover: '/images/band1-cover.jpg',
           duration: '4:12'
         },
+        
+        // ===== BAND 2 SONGS =====
         {
-          title: 'Demo Track 3',
-          artist: 'Crate Studio',
-          band: 'Another Band',
-          cover: 'https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?w=200&h=200&fit=crop',
-          src: '',
+          title: 'Song Title 3',
+          artist: 'Crate Marshall',
+          band: 'YOUR BAND 2 NAME',
+          src: '/music/band2-song1.mp3',
+          cover: '/images/band2-cover.jpg',
           duration: '3:28'
+        },
+        
+        // ===== SOLO PROJECT SONGS =====
+        {
+          title: 'Solo Song 1',
+          artist: 'Crate Marshall',
+          band: 'Solo Project',
+          src: '/music/solo-song1.mp3',
+          cover: '/images/solo-cover.jpg',
+          duration: '4:00'
         }
       ]
     }
@@ -166,66 +218,123 @@ export default {
     }
   },
   methods: {
+    toggleMinimize() {
+      this.isMinimized = !this.isMinimized
+    },
+    
     togglePlay() {
-      if (!this.currentTrack.src) {
-        // No audio source - just toggle visual state for demo
-        this.isPlaying = !this.isPlaying
-        return
-      }
+      const audio = this.$refs.audio
+      
+      if (!audio) return
       
       if (this.isPlaying) {
-        this.$refs.audio.pause()
+        audio.pause()
+        this.isPlaying = false
       } else {
-        this.$refs.audio.play()
+        // Try to play
+        const playPromise = audio.play()
+        
+        if (playPromise !== undefined) {
+          playPromise
+            .then(() => {
+              this.isPlaying = true
+            })
+            .catch(error => {
+              console.warn('Playback failed:', error)
+              // Still toggle visual state for demo if no audio source
+              if (!this.currentTrack.src || this.currentTrack.src.includes('placeholder')) {
+                this.isPlaying = !this.isPlaying
+              }
+            })
+        }
       }
-      this.isPlaying = !this.isPlaying
     },
     
     playTrack(index) {
       this.currentIndex = index
+      this.currentTime = 0
+      this.duration = 0
+      
       this.$nextTick(() => {
-        if (this.currentTrack.src) {
-          this.$refs.audio.play()
-          this.isPlaying = true
+        const audio = this.$refs.audio
+        if (audio && this.currentTrack.src) {
+          audio.load()
+          const playPromise = audio.play()
+          
+          if (playPromise !== undefined) {
+            playPromise
+              .then(() => {
+                this.isPlaying = true
+              })
+              .catch(error => {
+                console.warn('Playback failed:', error)
+              })
+          }
         }
       })
     },
     
     nextTrack() {
       this.currentIndex = (this.currentIndex + 1) % this.playlist.length
-      if (this.isPlaying && this.currentTrack.src) {
-        this.$nextTick(() => this.$refs.audio.play())
-      }
+      this.$nextTick(() => {
+        if (this.isPlaying) {
+          this.playTrack(this.currentIndex)
+        }
+      })
     },
     
     prevTrack() {
+      // If more than 3 seconds into track, restart it
+      if (this.currentTime > 3) {
+        this.$refs.audio.currentTime = 0
+        return
+      }
+      
       this.currentIndex = this.currentIndex === 0 
         ? this.playlist.length - 1 
         : this.currentIndex - 1
-      if (this.isPlaying && this.currentTrack.src) {
-        this.$nextTick(() => this.$refs.audio.play())
-      }
+        
+      this.$nextTick(() => {
+        if (this.isPlaying) {
+          this.playTrack(this.currentIndex)
+        }
+      })
     },
     
     updateTime() {
-      this.currentTime = this.$refs.audio.currentTime
+      if (this.$refs.audio) {
+        this.currentTime = this.$refs.audio.currentTime
+      }
     },
     
     onLoaded() {
-      this.duration = this.$refs.audio.duration
+      if (this.$refs.audio) {
+        this.duration = this.$refs.audio.duration
+      }
+    },
+    
+    onCanPlay() {
+      this.canPlay = true
+    },
+    
+    onError(e) {
+      console.warn('Audio error:', e)
+      this.canPlay = false
     },
     
     seek(e) {
-      const rect = e.target.getBoundingClientRect()
-      const percent = (e.clientX - rect.left) / rect.width
-      if (this.$refs.audio.duration) {
-        this.$refs.audio.currentTime = percent * this.$refs.audio.duration
+      const rect = e.currentTarget.getBoundingClientRect()
+      const percent = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width))
+      
+      if (this.$refs.audio && this.duration) {
+        this.$refs.audio.currentTime = percent * this.duration
       }
     },
     
     setVolume(e) {
       this.volume = parseInt(e.target.value)
-      this.isMuted = false
+      this.isMuted = this.volume === 0
+      
       if (this.$refs.audio) {
         this.$refs.audio.volume = this.volume / 100
       }
@@ -233,13 +342,14 @@ export default {
     
     toggleMute() {
       if (this.isMuted) {
-        this.volume = this.previousVolume
+        this.volume = this.previousVolume || 80
         this.isMuted = false
       } else {
         this.previousVolume = this.volume
         this.volume = 0
         this.isMuted = true
       }
+      
       if (this.$refs.audio) {
         this.$refs.audio.volume = this.volume / 100
       }
@@ -279,6 +389,7 @@ export default {
   width: 60px;
   height: 60px;
   box-shadow: var(--shadow-lg);
+  cursor: pointer;
 }
 
 .player-mini {
@@ -287,7 +398,6 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
   position: relative;
 }
 
@@ -307,6 +417,24 @@ export default {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.mini-play-btn {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  color: white;
+  font-size: 1rem;
+}
+
+.player-mini:hover .mini-play-btn {
+  opacity: 1;
 }
 
 .mini-equalizer {
@@ -375,6 +503,7 @@ export default {
   color: var(--text-secondary);
   cursor: pointer;
   transition: all 0.2s ease;
+  border: none;
 }
 
 .player-minimize:hover {
@@ -408,6 +537,11 @@ export default {
   animation: pulse-glow 2s ease-in-out infinite;
 }
 
+@keyframes pulse-glow {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.1); }
+}
+
 .album-vinyl {
   position: absolute;
   inset: 0;
@@ -419,6 +553,7 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  min-width: 0;
 }
 
 .track-title {
@@ -426,6 +561,9 @@ export default {
   font-weight: 600;
   color: var(--text-primary);
   margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .track-artist {
@@ -466,7 +604,7 @@ export default {
   background: var(--bg-elevated);
   border-radius: var(--radius-full);
   cursor: pointer;
-  overflow: hidden;
+  position: relative;
 }
 
 .player-progress-bar {
@@ -474,6 +612,23 @@ export default {
   background: linear-gradient(90deg, var(--accent-primary), var(--accent-pink));
   border-radius: var(--radius-full);
   transition: width 0.1s linear;
+}
+
+.player-progress-thumb {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 12px;
+  height: 12px;
+  background: var(--accent-primary);
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--accent-glow);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.player-progress:hover .player-progress-thumb {
+  opacity: 1;
 }
 
 /* Controls */
@@ -492,6 +647,7 @@ export default {
   align-items: center;
   justify-content: center;
   background: transparent;
+  border: none;
   border-radius: 50%;
   color: var(--text-secondary);
   cursor: pointer;
@@ -531,6 +687,7 @@ export default {
   align-items: center;
   justify-content: center;
   background: transparent;
+  border: none;
   color: var(--text-secondary);
   cursor: pointer;
   border-radius: 50%;
@@ -571,9 +728,9 @@ export default {
   padding: 10px;
   display: flex;
   align-items: center;
-  justify-content: center;
   gap: 8px;
   background: var(--bg-elevated);
+  border: none;
   border-radius: var(--radius-md);
   color: var(--text-secondary);
   font-size: 0.85rem;
@@ -644,6 +801,23 @@ export default {
   color: var(--text-muted);
   font-family: var(--font-mono);
 }
+
+.playlist-playing {
+  display: flex;
+  gap: 2px;
+  align-items: flex-end;
+}
+
+.playlist-playing span {
+  width: 3px;
+  background: var(--accent-primary);
+  border-radius: 2px;
+  animation: equalizer 0.8s ease infinite;
+}
+
+.playlist-playing span:nth-child(1) { height: 10px; animation-delay: 0s; }
+.playlist-playing span:nth-child(2) { height: 14px; animation-delay: 0.2s; }
+.playlist-playing span:nth-child(3) { height: 8px; animation-delay: 0.4s; }
 
 /* Responsive */
 @media (max-width: 768px) {

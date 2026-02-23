@@ -53,10 +53,16 @@
               <i class="fab fa-youtube"></i>
             </a>
           </div>
-          <a href="mailto:hello@cratestudio.com" class="email-link">
-            <i class="fas fa-envelope"></i>
-            hello@cratestudio.com
-          </a>
+          <div class="email-links">
+            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=cratemarshall@gmail.com" target="_blank" class="email-link">
+              <i class="fab fa-google"></i>
+              cratemarshall@gmail.com
+            </a>
+            <a href="https://outlook.office.com/mail/deeplink/compose?to=capinlac@student.apc.edu.ph" target="_blank" class="email-link">
+              <i class="fab fa-microsoft"></i>
+              capinlac@student.apc.edu.ph
+            </a>
+          </div>
         </div>
 
         <!-- Now Playing -->
@@ -266,6 +272,12 @@ export default {
   border-color: var(--accent-primary);
   transform: translateY(-3px);
   box-shadow: 0 5px 15px var(--accent-glow);
+}
+
+.email-links {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .email-link {
