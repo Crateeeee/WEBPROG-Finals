@@ -197,17 +197,17 @@
               </button>
               
               <div class="platform-submenu" :class="{ active: activePlatformDropdown === platform.name }">
-                <a 
-                  v-for="band in bands" 
-                  :key="band.name"
-                  :href="band[platform.key]"
-                  target="_blank"
-                  class="submenu-item"
-                  v-if="band[platform.key]"
-                >
-                  <img :src="band.image" :alt="band.name" class="submenu-img" />
-                  <span>{{ band.name }}</span>
-                </a>
+                <template v-for="band in bands" :key="band.name">
+                  <a 
+                    v-if="band[platform.key]"
+                    :href="band[platform.key]"
+                    target="_blank"
+                    class="submenu-item"
+                  >
+                    <img :src="band.image" :alt="band.name" class="submenu-img" />
+                    <span>{{ band.name }}</span>
+                  </a>
+                </template>
               </div>
             </div>
           </div>
