@@ -9,8 +9,10 @@ async function bootstrap() {
     origin: [
       'http://localhost:5173',
       'http://localhost:3000',
-      process.env.FRONTEND_URL || '*'
-    ],
+      'https://webprog-finals-one.vercel.app',
+      /\.vercel\.app$/,  // Allow all Vercel preview URLs
+      process.env.FRONTEND_URL
+    ].filter(Boolean),
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     credentials: true,
   });
