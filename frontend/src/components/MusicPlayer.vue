@@ -163,42 +163,29 @@ export default {
        * =====================================================
        */
       playlist: [
-        // ===== BAND 1 SONGS =====
         {
-          title: 'Song Title 1',
-          artist: 'Crate Marshall',
-          band: 'YOUR BAND 1 NAME',
-          src: '/music/band1-song1.mp3',
-          cover: '/images/band1-cover.jpg',
-          duration: '3:45'
+          title: 'Breaking The Waves',
+          artist: 'Fablewake',
+          band: 'Fablewake',
+          src: '/music/Breaking The Waves.wav',
+          cover: '/images/BTW.jpg',
+          duration: '4:31'
         },
         {
-          title: 'Song Title 2',
-          artist: 'Crate Marshall',
-          band: 'YOUR BAND 1 NAME',
-          src: '/music/band1-song2.mp3',
-          cover: '/images/band1-cover.jpg',
-          duration: '4:12'
+          title: 'Chernobyl Heart',
+          artist: 'Fablewake',
+          band: 'Fablewake',
+          src: '/music/Chernobyl Heart.mp3',
+          cover: '/images/chernobyl.jpg',
+          duration: '4:04'
         },
-        
-        // ===== BAND 2 SONGS =====
         {
-          title: 'Song Title 3',
-          artist: 'Crate Marshall',
-          band: 'YOUR BAND 2 NAME',
-          src: '/music/band2-song1.mp3',
-          cover: '/images/band2-cover.jpg',
-          duration: '3:28'
-        },
-        
-        // ===== SOLO PROJECT SONGS =====
-        {
-          title: 'Solo Song 1',
-          artist: 'Crate Marshall',
-          band: 'Solo Project',
-          src: '/music/solo-song1.mp3',
-          cover: '/images/solo-cover.jpg',
-          duration: '4:00'
+          title: 'Cm/S Demo',
+          artist: 'Centimeters Per Second',
+          band: 'Centimeters Per Second "Cm/S"',
+          src: '/music/demo.wav',
+          cover: '/images/cms gig.JPG',
+          duration: '4:41'
         }
       ]
     }

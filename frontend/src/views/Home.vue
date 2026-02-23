@@ -84,8 +84,7 @@
         <div class="about-content">
           <div class="about-image">
             <div class="image-frame">
-              <!-- Replace with your actual image path: /images/crate-guitar.jpg -->
-              <img src="/images/crate-guitar.jpg" alt="Crate playing guitar" />
+              <img src="/images/crate guitar.JPG" alt="Crate playing guitar" />
               <div class="frame-accent"></div>
             </div>
           </div>
@@ -400,36 +399,33 @@ export default {
        */
       bands: [
         {
-          name: 'YOUR BAND 1 NAME',      // <-- Replace with Band 1 name
-          role: 'Lead Guitarist',         // <-- Your role in the band
-          genre: 'Indie Rock',            // <-- Genre
-          image: '/images/band1.jpg',     // <-- Band image (put in /public/images/)
-          // Streaming links - replace with your actual links
-          spotify: 'https://open.spotify.com/artist/YOUR_ARTIST_ID',
-          appleMusic: 'https://music.apple.com/artist/YOUR_ARTIST_ID',
-          youtube: 'https://youtube.com/@YOUR_CHANNEL',
-          youtubeMusic: 'https://music.youtube.com/channel/YOUR_CHANNEL_ID'
+          name: 'Centimeters Per Second "Cm/S"',
+          role: 'Lead Guitarist',
+          genre: 'Pop Punk',
+          image: '/images/cms.jpg',
+          spotify: '',
+          appleMusic: '',
+          youtube: 'https://www.youtube.com/@CentimetersperSecond',
+          youtubeMusic: ''
         },
         {
-          name: 'YOUR BAND 2 NAME',      // <-- Replace with Band 2 name
-          role: 'Bassist / Vocals',       // <-- Your role
-          genre: 'Alternative',           // <-- Genre
-          image: '/images/band2.jpg',     // <-- Band image
-          // Streaming links
-          spotify: 'https://open.spotify.com/artist/YOUR_ARTIST_ID',
-          appleMusic: 'https://music.apple.com/artist/YOUR_ARTIST_ID',
-          youtube: 'https://youtube.com/@YOUR_CHANNEL',
-          youtubeMusic: 'https://music.youtube.com/channel/YOUR_CHANNEL_ID'
+          name: 'Fablewake',
+          role: 'Lead Guitarist',
+          genre: 'Progressive Rock',
+          image: '/images/fablewake.jpg',
+          spotify: 'https://open.spotify.com/artist/5pg6uAPBAN2wy2SxCi5fLn',
+          appleMusic: 'https://music.apple.com/us/artist/fablewake/1757894350',
+          youtube: 'https://www.youtube.com/@fablewakeofficial',
+          youtubeMusic: 'https://music.youtube.com/channel/UCAhrwviTv21ZT5y-NcXAPYg'
         },
         {
-          name: 'SOLO PROJECT',          // <-- Your solo project name
-          role: 'Producer',               // <-- Role
-          genre: 'Electronic',            // <-- Genre
-          image: '/images/solo.jpg',      // <-- Cover image
-          // Streaming links
-          spotify: 'https://open.spotify.com/artist/YOUR_ARTIST_ID',
-          appleMusic: '',                 // Leave empty if not available
-          youtube: 'https://youtube.com/@YOUR_CHANNEL',
+          name: 'Solo Project',
+          role: 'Guitar',
+          genre: 'Any',
+          image: '/images/solo.JPG',
+          spotify: '',
+          appleMusic: '',
+          youtube: 'https://www.youtube.com/@cratemarshall',
           youtubeMusic: ''
         }
       ],
