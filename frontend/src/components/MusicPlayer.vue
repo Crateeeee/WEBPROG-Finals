@@ -167,7 +167,7 @@ export default {
           title: 'Breaking The Waves',
           artist: 'Fablewake',
           band: 'Fablewake',
-          src: '/music/Breaking The Waves.wav',
+          src: '/music/breaking-the-waves.wav',
           cover: '/images/BTW.jpg',
           duration: '4:31'
         },
@@ -175,7 +175,7 @@ export default {
           title: 'Chernobyl Heart',
           artist: 'Fablewake',
           band: 'Fablewake',
-          src: '/music/Chernobyl Heart.mp3',
+          src: '/music/chernobyl-heart.mp3',
           cover: '/images/chernobyl.jpg',
           duration: '4:04'
         },
@@ -184,7 +184,7 @@ export default {
           artist: 'Centimeters Per Second',
           band: 'Centimeters Per Second "Cm/S"',
           src: '/music/demo.wav',
-          cover: '/images/cms gig.JPG',
+          cover: '/images/cms-gig.JPG',
           duration: '4:41'
         }
       ]

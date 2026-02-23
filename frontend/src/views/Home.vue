@@ -84,7 +84,7 @@
         <div class="about-content">
           <div class="about-image">
             <div class="image-frame">
-              <img src="/images/crate guitar.JPG" alt="Crate playing guitar" />
+              <img :src="profileImage" alt="Crate playing guitar" />
               <div class="frame-accent"></div>
             </div>
           </div>
@@ -355,6 +355,7 @@ export default {
   name: 'Home',
   data() {
     return {
+      profileImage: '/images/crate-guitar.JPG',
       activeTab: 'all',
       lightboxOpen: false,
       lightboxIndex: 0,
