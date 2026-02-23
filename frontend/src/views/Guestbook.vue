@@ -1,150 +1,178 @@
 <template>
   <main class="guestbook-page">
-    <!-- Floating Doodles -->
-    <div class="floating-doodles">
-      <span class="doodle">💌</span>
-      <span class="doodle">✏️</span>
-      <span class="doodle">📝</span>
-      <span class="doodle">💕</span>
-      <span class="doodle">✨</span>
+    <!-- Background Effects -->
+    <div class="page-bg">
+      <div class="glow-orb glow-purple" style="width: 300px; height: 300px; top: 20%; left: 5%;"></div>
+      <div class="glow-orb glow-pink" style="width: 250px; height: 250px; bottom: 30%; right: 10%;"></div>
     </div>
 
     <div class="container">
-      <!-- Page Header -->
-      <header class="page-header">
-        <div class="header-tape tape-pink"></div>
-        <h1 class="page-title">📓 Guest Notes</h1>
-        <p class="page-subtitle">Leave a sticky note on my board!</p>
+      <!-- Header -->
+      <header class="chat-header">
+        <div class="header-content">
+          <div class="header-info">
+            <h1 class="page-title">
+              <i class="fas fa-comments"></i>
+              Live Chat
+            </h1>
+            <div class="live-indicator">
+              <span class="live-dot"></span>
+              Live
+            </div>
+          </div>
+          <p class="page-subtitle">Join the conversation! Messages appear in real-time for everyone.</p>
+        </div>
+        
+        <div class="chat-stats">
+          <div class="stat-item">
+            <i class="fas fa-message"></i>
+            <span>{{ messages.length }} messages</span>
+          </div>
+          <div class="stat-item">
+            <i class="fas fa-users"></i>
+            <span>{{ uniqueUsers }} visitors</span>
+          </div>
+        </div>
       </header>
 
-      <!-- Stats Row -->
-      <div class="stats-row">
-        <div class="stat-sticky yellow">
-          <i class="fas fa-sticky-note"></i>
-          <span class="stat-value">{{ messages.length }}</span>
-          <span class="stat-label">Notes</span>
+      <!-- Chat Container -->
+      <div class="chat-container">
+        <!-- Messages Area -->
+        <div class="messages-area" ref="messagesContainer">
+          <!-- Loading State -->
+          <div v-if="loading" class="loading-state">
+            <div class="loading-spinner"></div>
+            <p>Loading messages...</p>
+          </div>
+
+          <!-- Empty State -->
+          <div v-else-if="messages.length === 0" class="empty-state">
+            <div class="empty-icon">
+              <i class="fas fa-comments"></i>
+            </div>
+            <h3>No messages yet</h3>
+            <p>Be the first to start the conversation!</p>
+          </div>
+
+          <!-- Messages List -->
+          <div v-else class="messages-list">
+            <div
+              v-for="message in messages"
+              :key="message.id"
+              class="message"
+              :class="{ 
+                'own-message': message.name === currentUser,
+                'new-message': message.isNew
+              }"
+            >
+              <div class="message-avatar" :style="{ background: getAvatarColor(message.name) }">
+                {{ getInitials(message.name) }}
+              </div>
+              
+              <div class="message-content">
+                <div class="message-header">
+                  <span class="message-author">{{ message.name }}</span>
+                  <span class="message-time">{{ formatTime(message.created_at) }}</span>
+                </div>
+                <p class="message-text">{{ message.message }}</p>
+                
+                <!-- Reactions -->
+                <div class="message-reactions">
+                  <button
+                    v-for="emoji in availableReactions"
+                    :key="emoji"
+                    class="reaction-btn"
+                    :class="{ active: hasReaction(message, emoji) }"
+                    @click="toggleReaction(message, emoji)"
+                  >
+                    {{ emoji }}
+                    <span v-if="getReactionCount(message, emoji) > 0" class="reaction-count">
+                      {{ getReactionCount(message, emoji) }}
+                    </span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="stat-sticky pink">
-          <i class="fas fa-users"></i>
-          <span class="stat-value">{{ uniqueUsers }}</span>
-          <span class="stat-label">Visitors</span>
+
+        <!-- Typing Indicator -->
+        <div v-if="typingUsers.length > 0" class="typing-indicator">
+          <span class="typing-dots">
+            <span></span><span></span><span></span>
+          </span>
+          <span>{{ typingText }}</span>
         </div>
-        <div class="stat-sticky blue">
-          <i class="fas fa-heart"></i>
-          <span class="stat-value">{{ totalReactions }}</span>
-          <span class="stat-label">Reactions</span>
+
+        <!-- Input Area -->
+        <div class="input-area">
+          <div class="input-row name-row" v-if="!currentUser">
+            <input
+              v-model="newMessage.name"
+              type="text"
+              placeholder="Enter your name to join..."
+              class="input-field name-input"
+              maxlength="50"
+              @keydown.enter="setUsername"
+            />
+            <button class="btn btn-primary join-btn" @click="setUsername" :disabled="!newMessage.name.trim()">
+              Join Chat
+            </button>
+          </div>
+
+          <div v-else class="input-row message-row">
+            <div class="current-user">
+              <div class="user-avatar" :style="{ background: getAvatarColor(currentUser) }">
+                {{ getInitials(currentUser) }}
+              </div>
+              <span class="user-name">{{ currentUser }}</span>
+              <button class="change-name-btn" @click="changeUser" title="Change name">
+                <i class="fas fa-pen"></i>
+              </button>
+            </div>
+            
+            <div class="message-input-wrapper">
+              <textarea
+                v-model="newMessage.message"
+                placeholder="Type a message..."
+                class="input-field message-input"
+                rows="1"
+                maxlength="500"
+                @keydown.enter.exact.prevent="sendMessage"
+                @input="handleTyping"
+              ></textarea>
+              <button 
+                class="send-btn" 
+                @click="sendMessage" 
+                :disabled="!canSend || sending"
+                title="Send message"
+              >
+                <i v-if="sending" class="fas fa-spinner fa-spin"></i>
+                <i v-else class="fas fa-paper-plane"></i>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
-      <!-- Compose Section -->
-      <section class="compose-section">
-        <div class="compose-sticky">
-          <div class="compose-pin"></div>
-          <h2 class="compose-title">✍️ Write a Note</h2>
-          
-          <div class="compose-form">
-            <div class="input-group">
-              <label for="name-input">Your Name</label>
-              <input
-                id="name-input"
-                v-model="newMessage.name"
-                type="text"
-                placeholder="What should we call you?"
-                class="note-input"
-                maxlength="50"
-              />
-            </div>
-            
-            <div class="input-group">
-              <label for="message-input">Your Message</label>
-              <textarea
-                id="message-input"
-                v-model="newMessage.message"
-                placeholder="Say hello, share a thought, or leave some love..."
-                class="note-textarea"
-                rows="4"
-                maxlength="500"
-                @keydown.enter.ctrl="sendMessage"
-              ></textarea>
-            </div>
-            
-            <div class="compose-footer">
-              <span class="char-count">{{ newMessage.message.length }}/500</span>
-              <button
-                class="send-btn"
-                :disabled="!canSend || sending"
-                @click="sendMessage"
-              >
-                <i v-if="sending" class="fas fa-spinner fa-spin"></i>
-                <template v-else>
-                  <i class="fas fa-paper-plane"></i>
-                  Post Note
-                </template>
-              </button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Message Board -->
-      <section class="message-board">
-        <div class="board-header">
-          <h2 class="board-title">📌 The Board</h2>
-        </div>
-
-        <div v-if="loading" class="loading-state">
-          <div class="loading-spinner"></div>
-          <p>Loading notes...</p>
-        </div>
-
-        <div v-else-if="messages.length === 0" class="empty-state">
-          <div class="empty-note">
-            <div class="note-pin gold"></div>
-            <i class="fas fa-sticky-note"></i>
-            <h3>No notes yet!</h3>
-            <p>Be the first to leave a note on the board.</p>
-          </div>
-        </div>
-
-        <div v-else class="notes-grid">
-          <div
-            v-for="(message, index) in messages"
-            :key="message.id"
-            class="note-card"
-            :class="getNoteColor(index)"
-            :style="{ '--rotate': getRandomRotation(index) + 'deg' }"
+      <!-- Online Users -->
+      <div class="online-users">
+        <h4>
+          <i class="fas fa-circle" style="color: var(--accent-green); font-size: 8px;"></i>
+          Recent Visitors
+        </h4>
+        <div class="users-list">
+          <div 
+            v-for="user in recentUsers" 
+            :key="user"
+            class="user-badge"
+            :style="{ background: getAvatarColor(user) }"
+            :title="user"
           >
-            <div class="note-pin" :class="index % 2 === 0 ? 'red' : 'gold'"></div>
-            
-            <div class="note-header">
-              <div class="note-avatar" :style="{ background: getAvatarColor(message.name) }">
-                {{ getInitials(message.name) }}
-              </div>
-              <div class="note-meta">
-                <span class="note-author">{{ message.name }}</span>
-                <span class="note-time">{{ formatTime(message.created_at) }}</span>
-              </div>
-            </div>
-            
-            <p class="note-message">{{ message.message }}</p>
-            
-            <div class="note-reactions">
-              <button
-                v-for="reaction in availableReactions"
-                :key="reaction"
-                class="reaction-btn"
-                :class="{ active: hasReaction(message, reaction) }"
-                @click="toggleReaction(message, reaction)"
-              >
-                {{ reaction }}
-                <span v-if="getReactionCount(message, reaction) > 0" class="reaction-count">
-                  {{ getReactionCount(message, reaction) }}
-                </span>
-              </button>
-            </div>
+            {{ getInitials(user) }}
           </div>
         </div>
-      </section>
+      </div>
     </div>
   </main>
 </template>
@@ -160,56 +188,107 @@ export default {
       loading: true,
       sending: false,
       currentUser: '',
+      typingUsers: [],
       newMessage: {
         name: '',
         message: ''
       },
-      availableReactions: ['❤️', '👍', '😊', '🎉', '✨'],
-      noteColors: ['yellow', 'pink', 'blue', 'green', 'purple']
+      availableReactions: ['❤️', '🔥', '👏', '😄', '🎵'],
+      pollInterval: null
     }
   },
   computed: {
     canSend() {
-      return this.newMessage.name.trim() && this.newMessage.message.trim()
+      return this.newMessage.message.trim().length > 0
     },
     uniqueUsers() {
       const users = new Set(this.messages.map(m => m.name))
       return users.size
     },
-    totalReactions() {
-      return this.messages.reduce((total, message) => {
-        return total + (message.reactions ? message.reactions.length : 0)
-      }, 0)
+    recentUsers() {
+      const users = [...new Set(this.messages.map(m => m.name))]
+      return users.slice(-10).reverse()
+    },
+    typingText() {
+      if (this.typingUsers.length === 1) {
+        return `${this.typingUsers[0]} is typing...`
+      } else if (this.typingUsers.length > 1) {
+        return 'Several people are typing...'
+      }
+      return ''
     }
   },
   async mounted() {
-    const savedName = localStorage.getItem('guestbook_name')
+    // Load saved username
+    const savedName = localStorage.getItem('crate-chat-user')
     if (savedName) {
-      this.newMessage.name = savedName
       this.currentUser = savedName
+      this.newMessage.name = savedName
     }
     
     await this.fetchMessages()
+    this.startPolling()
+  },
+  beforeUnmount() {
+    this.stopPolling()
   },
   methods: {
     async fetchMessages() {
       this.loading = true
       try {
-        this.messages = await messageService.getMessages()
+        const messages = await messageService.getMessages()
+        this.messages = messages.map(m => ({ ...m, isNew: false }))
       } catch (error) {
         console.error('Failed to fetch messages:', error)
-        this.messages = [
-          {
-            id: 1,
-            name: 'Demo User',
-            message: 'Welcome to the guestbook! Leave your note here.',
-            created_at: new Date().toISOString(),
-            reactions: []
-          }
-        ]
+        this.messages = []
       } finally {
         this.loading = false
+        this.scrollToBottom()
       }
+    },
+
+    startPolling() {
+      // Poll for new messages every 3 seconds for "live" effect
+      this.pollInterval = setInterval(async () => {
+        try {
+          const messages = await messageService.getMessages()
+          const newMessages = messages.filter(m => 
+            !this.messages.some(existing => existing.id === m.id)
+          )
+          
+          if (newMessages.length > 0) {
+            newMessages.forEach(msg => {
+              this.messages.push({ ...msg, isNew: true })
+            })
+            this.scrollToBottom()
+            
+            // Remove "new" highlight after animation
+            setTimeout(() => {
+              this.messages = this.messages.map(m => ({ ...m, isNew: false }))
+            }, 2000)
+          }
+        } catch (error) {
+          console.error('Polling error:', error)
+        }
+      }, 3000)
+    },
+
+    stopPolling() {
+      if (this.pollInterval) {
+        clearInterval(this.pollInterval)
+      }
+    },
+
+    setUsername() {
+      if (this.newMessage.name.trim()) {
+        this.currentUser = this.newMessage.name.trim()
+        localStorage.setItem('crate-chat-user', this.currentUser)
+      }
+    },
+
+    changeUser() {
+      this.currentUser = ''
+      localStorage.removeItem('crate-chat-user')
     },
 
     async sendMessage() {
@@ -218,26 +297,33 @@ export default {
       this.sending = true
       
       try {
-        localStorage.setItem('guestbook_name', this.newMessage.name)
-        this.currentUser = this.newMessage.name
-
         const response = await messageService.createMessage({
-          name: this.newMessage.name.trim(),
+          name: this.currentUser,
           message: this.newMessage.message.trim()
         })
 
-        this.messages.unshift({
+        this.messages.push({
           ...response,
-          reactions: []
+          reactions: [],
+          isNew: true
         })
 
         this.newMessage.message = ''
+        this.scrollToBottom()
+        
+        setTimeout(() => {
+          this.messages = this.messages.map(m => ({ ...m, isNew: false }))
+        }, 2000)
       } catch (error) {
         console.error('Failed to send message:', error)
-        alert('Failed to post note. Please try again.')
+        alert('Failed to send message. Please try again.')
       } finally {
         this.sending = false
       }
+    },
+
+    handleTyping() {
+      // Could implement real typing indicators with WebSockets
     },
 
     async toggleReaction(message, emoji) {
@@ -277,19 +363,10 @@ export default {
       return (message.reactions || []).filter(r => r.emoji === emoji).length
     },
 
-    getNoteColor(index) {
-      return this.noteColors[index % this.noteColors.length]
-    },
-
-    getRandomRotation(index) {
-      const rotations = [-3, 2, -2, 3, -1, 1, -4, 4]
-      return rotations[index % rotations.length]
-    },
-
     getAvatarColor(name) {
       const colors = [
-        '#FF6B6B', '#4ECDC4', '#FFE66D', '#95E1D3', 
-        '#F38181', '#AA96DA', '#FCBAD3', '#A8D8EA'
+        '#8b5cf6', '#ec4899', '#06b6d4', '#22c55e', 
+        '#f59e0b', '#ef4444', '#3b82f6', '#a855f7'
       ]
       let hash = 0
       for (let i = 0; i < name.length; i++) {
@@ -319,7 +396,17 @@ export default {
       return d.toLocaleDateString('en-US', {
         month: 'short',
         day: 'numeric',
-        year: d.getFullYear() !== now.getFullYear() ? 'numeric' : undefined
+        hour: '2-digit',
+        minute: '2-digit'
+      })
+    },
+
+    scrollToBottom() {
+      this.$nextTick(() => {
+        const container = this.$refs.messagesContainer
+        if (container) {
+          container.scrollTop = container.scrollHeight
+        }
       })
     }
   }
@@ -328,508 +415,517 @@ export default {
 
 <style scoped>
 .guestbook-page {
-  padding-top: 120px;
-  padding-bottom: 80px;
   min-height: 100vh;
+  padding-top: calc(var(--nav-height) + 40px);
+  padding-bottom: 60px;
   position: relative;
-  overflow: hidden;
 }
 
-/* Floating Doodles */
-.floating-doodles {
+.page-bg {
   position: fixed;
   inset: 0;
   pointer-events: none;
-  z-index: 0;
+  z-index: -1;
 }
 
-.floating-doodles .doodle {
-  position: absolute;
-  font-size: 2rem;
-  opacity: 0.15;
-  animation: float 8s ease-in-out infinite;
-}
-
-.floating-doodles .doodle:nth-child(1) { top: 15%; left: 5%; animation-delay: 0s; }
-.floating-doodles .doodle:nth-child(2) { top: 25%; right: 8%; animation-delay: 1.5s; }
-.floating-doodles .doodle:nth-child(3) { top: 60%; left: 3%; animation-delay: 3s; }
-.floating-doodles .doodle:nth-child(4) { top: 70%; right: 5%; animation-delay: 4.5s; }
-.floating-doodles .doodle:nth-child(5) { top: 45%; right: 12%; animation-delay: 2s; }
-
-@keyframes float {
-  0%, 100% { transform: translateY(0) rotate(0deg); }
-  50% { transform: translateY(-20px) rotate(5deg); }
-}
-
-/* Page Header */
-.page-header {
+/* Header */
+.chat-header {
   text-align: center;
-  margin-bottom: 3rem;
-  position: relative;
+  margin-bottom: 32px;
 }
 
-.header-tape {
-  position: absolute;
-  top: -15px;
-  left: 50%;
-  transform: translateX(-50%) rotate(-2deg);
-  width: 120px;
-  height: 30px;
-  opacity: 0.7;
+.header-content {
+  margin-bottom: 20px;
 }
 
-.tape-pink {
-  background: var(--washi-pink);
+.header-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 12px;
 }
 
 .page-title {
-  font-family: 'Caveat', cursive;
-  font-size: 4rem;
-  color: var(--ink-primary);
-  margin-bottom: 0.5rem;
+  font-size: 2.5rem;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.page-title i {
+  color: var(--accent-primary);
+}
+
+.live-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  background: rgba(34, 197, 94, 0.15);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  border-radius: var(--radius-full);
+  font-size: 0.85rem;
+  color: var(--accent-green);
+  font-weight: 500;
+}
+
+.live-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--accent-green);
+  border-radius: 50%;
+  animation: pulse-live 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse-live {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.3); }
 }
 
 .page-subtitle {
-  font-family: 'Shadows Into Light', cursive;
-  font-size: 1.5rem;
-  color: var(--ink-secondary);
+  color: var(--text-secondary);
+  font-size: 1.1rem;
 }
 
-/* Stats Row */
-.stats-row {
+.chat-stats {
   display: flex;
   justify-content: center;
-  gap: 2rem;
-  margin-bottom: 3rem;
-  flex-wrap: wrap;
+  gap: 32px;
 }
 
-.stat-sticky {
-  padding: 1.5rem 2rem;
-  border-radius: 2px;
-  box-shadow: 3px 3px 10px rgba(0,0,0,0.1);
-  text-align: center;
-  transform: rotate(-1deg);
-  transition: transform 0.3s ease;
-  min-width: 120px;
-}
-
-.stat-sticky:hover {
-  transform: rotate(0deg) scale(1.05);
-}
-
-.stat-sticky.yellow { background: var(--sticky-yellow); }
-.stat-sticky.pink { background: var(--sticky-pink); }
-.stat-sticky.blue { background: var(--sticky-blue); }
-
-.stat-sticky i {
-  font-size: 1.5rem;
-  color: var(--ink-primary);
-  margin-bottom: 0.5rem;
-  display: block;
-}
-
-.stat-value {
-  font-family: 'Caveat', cursive;
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: var(--ink-primary);
-  display: block;
-  line-height: 1;
-}
-
-.stat-label {
-  font-size: 0.9rem;
-  color: var(--ink-secondary);
-}
-
-/* Compose Section */
-.compose-section {
-  max-width: 600px;
-  margin: 0 auto 4rem;
-}
-
-.compose-sticky {
-  background: var(--sticky-yellow);
-  padding: 2rem;
-  border-radius: 2px;
-  box-shadow: 4px 4px 15px rgba(0,0,0,0.15);
-  position: relative;
-  transform: rotate(-0.5deg);
-}
-
-.compose-pin {
-  position: absolute;
-  top: -8px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 20px;
-  height: 20px;
-  background: radial-gradient(circle at 30% 30%, #ff6b6b, #cc5555);
-  border-radius: 50%;
-  box-shadow: 0 3px 6px rgba(0,0,0,0.3);
-}
-
-.compose-title {
-  font-family: 'Caveat', cursive;
-  font-size: 2rem;
-  color: var(--ink-primary);
-  margin-bottom: 1.5rem;
-  text-align: center;
-}
-
-.input-group {
-  margin-bottom: 1.25rem;
-}
-
-.input-group label {
-  display: block;
-  font-family: 'Shadows Into Light', cursive;
-  font-size: 1.1rem;
-  color: var(--ink-primary);
-  margin-bottom: 0.5rem;
-}
-
-.note-input,
-.note-textarea {
-  width: 100%;
-  padding: 12px 16px;
-  border: 2px dashed var(--ink-light);
-  border-radius: 8px;
-  background: rgba(255,255,255,0.6);
-  font-family: 'Shadows Into Light', cursive;
-  font-size: 1.1rem;
-  color: var(--ink-primary);
-  transition: all 0.3s ease;
-}
-
-.note-input:focus,
-.note-textarea:focus {
-  outline: none;
-  border-color: var(--ink-primary);
-  background: rgba(255,255,255,0.9);
-}
-
-.note-textarea {
-  resize: vertical;
-  min-height: 100px;
-}
-
-.compose-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 1rem;
-}
-
-.char-count {
-  font-size: 0.85rem;
-  color: var(--ink-secondary);
-}
-
-.send-btn {
-  background: var(--ink-primary);
-  color: white;
-  border: none;
-  padding: 12px 24px;
-  border-radius: 25px;
-  font-family: 'Shadows Into Light', cursive;
-  font-size: 1.1rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
+.stat-item {
   display: flex;
   align-items: center;
   gap: 8px;
+  color: var(--text-muted);
+  font-size: 0.9rem;
 }
 
-.send-btn:hover:not(:disabled) {
-  transform: scale(1.05);
-  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+.stat-item i {
+  color: var(--accent-primary);
 }
 
-.send-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+/* Chat Container */
+.chat-container {
+  max-width: 800px;
+  margin: 0 auto;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
 }
 
-/* Message Board */
-.message-board {
-  position: relative;
+/* Messages Area */
+.messages-area {
+  height: 500px;
+  overflow-y: auto;
+  padding: 24px;
+  background: var(--bg-secondary);
 }
 
-.board-header {
-  text-align: center;
-  margin-bottom: 2rem;
-}
-
-.board-title {
-  font-family: 'Caveat', cursive;
-  font-size: 2.5rem;
-  color: var(--ink-primary);
-}
-
-/* Loading & Empty States */
 .loading-state,
 .empty-state {
-  text-align: center;
-  padding: 4rem 2rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
 }
 
 .loading-spinner {
-  width: 50px;
-  height: 50px;
-  border: 4px solid var(--paper-lines);
-  border-top-color: var(--ink-primary);
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--border-color);
+  border-top-color: var(--accent-primary);
   border-radius: 50%;
   animation: spin 1s linear infinite;
-  margin: 0 auto 1rem;
+  margin-bottom: 16px;
 }
 
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
 
-.empty-note {
-  background: var(--sticky-yellow);
-  padding: 3rem 2rem;
-  border-radius: 2px;
-  box-shadow: 4px 4px 15px rgba(0,0,0,0.1);
-  max-width: 300px;
-  margin: 0 auto;
-  position: relative;
-  transform: rotate(-2deg);
+.empty-icon {
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 50%;
+  margin-bottom: 20px;
 }
 
-.empty-note i {
-  font-size: 3rem;
-  color: var(--ink-light);
-  margin-bottom: 1rem;
+.empty-icon i {
+  font-size: 2rem;
+  color: var(--text-muted);
 }
 
-.empty-note h3 {
-  font-family: 'Caveat', cursive;
-  font-size: 1.8rem;
-  color: var(--ink-primary);
-  margin-bottom: 0.5rem;
+.empty-state h3 {
+  font-size: 1.25rem;
+  color: var(--text-primary);
+  margin-bottom: 8px;
 }
 
-.empty-note p {
-  color: var(--ink-secondary);
+/* Messages List */
+.messages-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
-/* Notes Grid */
-.notes-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 2rem;
-  padding: 1rem;
+.message {
+  display: flex;
+  gap: 12px;
+  animation: slideIn 0.3s ease;
 }
 
-.note-card {
-  padding: 1.5rem;
-  border-radius: 2px;
-  box-shadow: 4px 4px 12px rgba(0,0,0,0.12);
-  position: relative;
-  transform: rotate(var(--rotate, 0deg));
-  transition: all 0.3s ease;
-  animation: noteAppear 0.5s ease backwards;
+.message.new-message {
+  animation: newMessage 0.5s ease;
 }
 
-.note-card:hover {
-  transform: rotate(0deg) scale(1.02);
-  box-shadow: 6px 6px 20px rgba(0,0,0,0.15);
-  z-index: 10;
-}
-
-@keyframes noteAppear {
+@keyframes slideIn {
   from {
     opacity: 0;
-    transform: scale(0.8) rotate(var(--rotate, 0deg));
+    transform: translateY(10px);
   }
 }
 
-.note-card.yellow { background: var(--sticky-yellow); }
-.note-card.pink { background: var(--sticky-pink); }
-.note-card.blue { background: var(--sticky-blue); }
-.note-card.green { background: var(--sticky-green); }
-.note-card.purple { background: var(--sticky-purple); }
-
-.note-pin {
-  position: absolute;
-  top: -8px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+@keyframes newMessage {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+    background: rgba(139, 92, 246, 0.1);
+  }
+  50% {
+    background: rgba(139, 92, 246, 0.1);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    background: transparent;
+  }
 }
 
-.note-pin.red {
-  background: radial-gradient(circle at 30% 30%, #ff6b6b, #cc5555);
-}
-
-.note-pin.gold {
-  background: radial-gradient(circle at 30% 30%, #ffd700, #cc9900);
-}
-
-/* Note Header */
-.note-header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 1rem;
-}
-
-.note-avatar {
-  width: 40px;
-  height: 40px;
+.message-avatar {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 700;
+  font-weight: 600;
   font-size: 0.9rem;
   color: white;
-  text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
 }
 
-.note-meta {
+.message-content {
   flex: 1;
+  min-width: 0;
 }
 
-.note-author {
-  display: block;
-  font-family: 'Caveat', cursive;
-  font-size: 1.3rem;
-  font-weight: 700;
-  color: var(--ink-primary);
-  line-height: 1.2;
+.message-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 6px;
 }
 
-.note-time {
+.message-author {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.message-time {
   font-size: 0.8rem;
-  color: var(--ink-secondary);
+  color: var(--text-muted);
 }
 
-/* Note Message */
-.note-message {
-  font-family: 'Shadows Into Light', cursive;
-  font-size: 1.15rem;
-  line-height: 1.6;
-  color: var(--ink-primary);
-  margin-bottom: 1rem;
+.message-text {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 0 var(--radius-md) var(--radius-md) var(--radius-md);
+  padding: 12px 16px;
+  color: var(--text-primary);
+  line-height: 1.5;
   word-wrap: break-word;
+  margin: 0;
+}
+
+.own-message .message-text {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(139, 92, 246, 0.1));
+  border-color: var(--accent-primary);
 }
 
 /* Reactions */
-.note-reactions {
+.message-reactions {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
-  border-top: 1px dashed var(--ink-light);
-  padding-top: 0.75rem;
+  margin-top: 10px;
 }
 
 .reaction-btn {
-  background: rgba(255,255,255,0.5);
-  border: 1px solid transparent;
-  border-radius: 15px;
-  padding: 4px 10px;
-  font-size: 0.95rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
   display: flex;
   align-items: center;
   gap: 4px;
+  padding: 4px 10px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 .reaction-btn:hover {
-  background: rgba(255,255,255,0.8);
+  border-color: var(--accent-primary);
   transform: scale(1.1);
 }
 
 .reaction-btn.active {
-  background: rgba(255,255,255,0.9);
-  border-color: var(--ink-primary);
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  background: rgba(139, 92, 246, 0.15);
+  border-color: var(--accent-primary);
 }
 
 .reaction-count {
-  font-size: 0.8rem;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+/* Typing Indicator */
+.typing-indicator {
+  padding: 12px 24px;
+  background: var(--bg-elevated);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.typing-dots {
+  display: flex;
+  gap: 3px;
+}
+
+.typing-dots span {
+  width: 6px;
+  height: 6px;
+  background: var(--text-muted);
+  border-radius: 50%;
+  animation: typingBounce 1.4s infinite ease-in-out;
+}
+
+.typing-dots span:nth-child(1) { animation-delay: 0s; }
+.typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+.typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes typingBounce {
+  0%, 80%, 100% { transform: scale(0.8); }
+  40% { transform: scale(1.2); }
+}
+
+/* Input Area */
+.input-area {
+  padding: 20px;
+  background: var(--bg-card);
+  border-top: 1px solid var(--border-color);
+}
+
+.input-row {
+  display: flex;
+  gap: 12px;
+}
+
+.name-row {
+  justify-content: center;
+}
+
+.name-input {
+  max-width: 300px;
+}
+
+.join-btn {
+  white-space: nowrap;
+}
+
+.message-row {
+  flex-direction: column;
+  gap: 16px;
+}
+
+.current-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
   font-weight: 600;
-  color: var(--ink-secondary);
+  color: white;
+}
+
+.user-name {
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.change-name-btn {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-elevated);
+  border-radius: 50%;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.change-name-btn:hover {
+  color: var(--accent-primary);
+  background: var(--bg-hover);
+}
+
+.message-input-wrapper {
+  display: flex;
+  gap: 12px;
+  align-items: flex-end;
+}
+
+.message-input {
+  flex: 1;
+  resize: none;
+  min-height: 44px;
+  max-height: 120px;
+}
+
+.send-btn {
+  width: 50px;
+  height: 50px;
+  min-width: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--accent-primary);
+  border: none;
+  border-radius: 50%;
+  color: white;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 15px var(--accent-glow);
+}
+
+.send-btn:hover:not(:disabled) {
+  background: var(--accent-secondary);
+  transform: scale(1.05);
+  box-shadow: 0 6px 25px var(--accent-glow);
+}
+
+.send-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* Online Users */
+.online-users {
+  max-width: 800px;
+  margin: 24px auto 0;
+  padding: 20px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+}
+
+.online-users h4 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 16px;
+}
+
+.users-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.user-badge {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: white;
+  cursor: default;
+  transition: transform 0.2s ease;
+}
+
+.user-badge:hover {
+  transform: scale(1.1);
 }
 
 /* Responsive */
 @media (max-width: 768px) {
   .guestbook-page {
-    padding-top: 100px;
-    padding-bottom: 60px;
+    padding-top: calc(var(--nav-height) + 20px);
   }
 
   .page-title {
-    font-size: 2.8rem;
+    font-size: 1.8rem;
   }
 
-  .page-subtitle {
-    font-size: 1.2rem;
-  }
-
-  .stats-row {
-    gap: 1rem;
-  }
-
-  .stat-sticky {
-    padding: 1rem 1.5rem;
-    min-width: 100px;
-  }
-
-  .stat-value {
-    font-size: 2rem;
-  }
-
-  .compose-sticky {
-    padding: 1.5rem;
-  }
-
-  .compose-title {
-    font-size: 1.6rem;
-  }
-
-  .notes-grid {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-  }
-
-  .note-card {
-    transform: rotate(0deg) !important;
-  }
-
-  .floating-doodles .doodle {
-    font-size: 1.5rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .stats-row {
+  .header-info {
     flex-direction: column;
-    align-items: center;
+    gap: 12px;
   }
 
-  .stat-sticky {
-    width: 80%;
-    transform: rotate(0deg);
+  .chat-stats {
+    gap: 20px;
   }
 
-  .compose-footer {
-    flex-direction: column;
-    gap: 1rem;
+  .messages-area {
+    height: 400px;
+    padding: 16px;
   }
 
-  .send-btn {
-    width: 100%;
-    justify-content: center;
+  .message-avatar {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    font-size: 0.8rem;
+  }
+
+  .input-area {
+    padding: 16px;
+  }
+
+  .name-input {
+    max-width: 100%;
   }
 }
 </style>

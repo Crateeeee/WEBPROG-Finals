@@ -1,126 +1,177 @@
 <template>
   <main class="home">
-    <!-- Floating Doodles -->
-    <div class="floating-doodles">
-      <span class="doodle doodle-star" style="top: 10%; left: 5%;">✦</span>
-      <span class="doodle doodle-heart" style="top: 20%; right: 10%;">♥</span>
-      <span class="doodle doodle-sparkle" style="top: 60%; left: 8%;">✨</span>
-      <span class="doodle doodle-star" style="top: 80%; right: 5%;">★</span>
-    </div>
-
     <!-- Hero Section -->
-    <section id="home" class="hero">
+    <section class="hero">
+      <div class="hero-bg">
+        <div class="glow-orb glow-purple" style="width: 400px; height: 400px; top: 10%; left: 10%;"></div>
+        <div class="glow-orb glow-pink" style="width: 300px; height: 300px; bottom: 20%; right: 15%;"></div>
+      </div>
+      
       <div class="container">
         <div class="hero-content">
-          <!-- Left Side - Text -->
           <div class="hero-text">
-            <div class="hero-tape washi-tape pink" style="transform: rotate(-8deg);"></div>
-            <span class="hero-wave">👋</span>
-            <h1 class="hero-title text-handwritten">
-              Hi there! I'm <span class="highlight">Crate Marshall</span>
+            <div class="hero-label">
+              <span class="label-line"></span>
+              <span>Musician • Developer • Creative</span>
+            </div>
+            
+            <h1 class="hero-title">
+              Hi, I'm <span class="text-gradient">Crate</span>
             </h1>
-            <div class="hero-subtitle text-handwritten-alt">
-              <span class="typing-wrapper">
-                <span class="typing-text">{{ typingText }}</span>
-                <span class="cursor">|</span>
-              </span>
-            </div>
+            
             <p class="hero-description">
-              A Web Programming student at <strong>Asia Pacific College</strong>. 
-              I love building interactive experiences and solving problems with code!
+              Making music with various bands and building digital experiences. 
+              Welcome to my creative space where sound meets code.
             </p>
-            <div class="hero-buttons">
-              <router-link to="/guestbook" class="btn btn-primary">
-                <i class="fas fa-pen-fancy"></i> Sign My Guestbook
+            
+            <div class="hero-actions">
+              <a href="#music" class="btn btn-primary">
+                <i class="fas fa-headphones"></i>
+                Listen to My Music
+              </a>
+              <router-link to="/guestbook" class="btn btn-secondary">
+                <i class="fas fa-comments"></i>
+                Join Live Chat
               </router-link>
-              <a href="#about" class="btn btn-secondary">
-                <i class="fas fa-arrow-down"></i> Know Me Better
-              </a>
             </div>
-            <div class="hero-social">
-              <a href="https://www.facebook.com/CrateeMarshall" target="_blank" rel="noopener" class="social-link">
-                <i class="fab fa-facebook-f"></i>
-              </a>
-              <a href="https://github.com/Crateeeee" target="_blank" rel="noopener" class="social-link">
-                <i class="fab fa-github"></i>
-              </a>
-              <a href="https://www.linkedin.com/in/crate-marshall-pinlac-57572824a/" target="_blank" rel="noopener" class="social-link">
-                <i class="fab fa-linkedin-in"></i>
-              </a>
-              <a href="https://www.youtube.com/@cratemarshall" target="_blank" rel="noopener" class="social-link">
-                <i class="fab fa-youtube"></i>
-              </a>
+
+            <div class="hero-stats">
+              <div class="stat">
+                <span class="stat-value">3+</span>
+                <span class="stat-label">Bands</span>
+              </div>
+              <div class="stat-divider"></div>
+              <div class="stat">
+                <span class="stat-value">50+</span>
+                <span class="stat-label">Tracks</span>
+              </div>
+              <div class="stat-divider"></div>
+              <div class="stat">
+                <span class="stat-value">5+</span>
+                <span class="stat-label">Years</span>
+              </div>
             </div>
           </div>
 
-          <!-- Right Side - Polaroid Photo -->
-          <div class="hero-image">
-            <div class="polaroid hero-polaroid">
-              <img src="https://avatars.githubusercontent.com/u/108235179?v=4" alt="Crate Marshall Pinlac" />
-              <p class="polaroid-caption">That's me! ✌️</p>
+          <div class="hero-visual">
+            <div class="vinyl-container">
+              <div class="vinyl-record">
+                <div class="vinyl-grooves"></div>
+                <div class="vinyl-label">
+                  <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=200&h=200&fit=crop" alt="Profile" />
+                </div>
+              </div>
+              <div class="vinyl-arm"></div>
             </div>
-            <div class="washi-tape blue hero-tape-2" style="transform: rotate(15deg);"></div>
           </div>
         </div>
       </div>
       
-      <!-- Scroll Indicator -->
-      <a href="#about" class="scroll-indicator">
-        <span class="text-handwritten">scroll down</span>
+      <div class="scroll-indicator">
+        <span>Scroll</span>
         <i class="fas fa-chevron-down"></i>
-      </a>
+      </div>
     </section>
 
     <!-- About Section -->
     <section id="about" class="section about-section">
       <div class="container">
-        <h2 class="section-title">✏️ About Me</h2>
-        <p class="section-subtitle">Here's a little bit about who I am</p>
+        <div class="section-header">
+          <span class="section-label">// About Me</span>
+          <h2 class="section-title">The Story Behind <span class="text-gradient">The Sound</span></h2>
+        </div>
 
-        <div class="about-bento">
-          <!-- Education Card -->
-          <div class="bento-card sticky-note bg-yellow" style="transform: rotate(-2deg);">
-            <div class="note-pin"></div>
-            <h3 class="card-title"><i class="fas fa-graduation-cap"></i> Education</h3>
-            <ul class="card-list">
-              <li>📚 2023 - Present: Asia Pacific College (BSIT)</li>
-              <li>🎓 2021 - 2023: Senior High School (STEM)</li>
-            </ul>
+        <div class="about-content">
+          <div class="about-image">
+            <div class="image-frame">
+              <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=500&fit=crop" alt="Crate" />
+              <div class="frame-accent"></div>
+            </div>
           </div>
 
-          <!-- Achievements Card -->
-          <div class="bento-card sticky-note bg-pink" style="transform: rotate(1deg);">
-            <div class="note-pin"></div>
-            <h3 class="card-title"><i class="fas fa-trophy"></i> Achievements</h3>
-            <ul class="card-list">
-              <li>🤖 Facial Recognition Attendance System</li>
-              <li>📧 Email Cleaner Developer</li>
-              <li>⚡ OutSystems Developer</li>
-              <li>🏅 Scrum Foundation Certificate</li>
-            </ul>
-          </div>
-
-          <!-- Course Card -->
-          <div class="bento-card sticky-note bg-blue" style="transform: rotate(-1deg);">
-            <div class="note-pin"></div>
-            <h3 class="card-title"><i class="fas fa-book-open"></i> Course</h3>
-            <p class="card-text">Bachelor of Science in Information Technology (BSIT)</p>
-            <img 
-              src="https://s3-ap-southeast-1.amazonaws.com/kalibrr-company-assets/logos/52GHMYQP6F32QUQU8FVE-58003a2b.png" 
-              alt="APC Logo" 
-              class="school-logo"
-            />
-          </div>
-
-          <!-- Goals Card - Featured -->
-          <div class="bento-card sticky-note bg-green featured" style="transform: rotate(2deg);">
-            <div class="note-pin gold"></div>
-            <h3 class="card-title"><i class="fas fa-rocket"></i> Dreams & Goals</h3>
-            <p class="card-text">
-              🚀 To become a proficient Full-Stack Developer and contribute to 
-              innovative tech solutions that help society thrive!
+          <div class="about-text">
+            <p class="about-intro">
+              A passionate musician and developer based in the Philippines. I've been playing 
+              in bands since high school, exploring different genres from rock to indie to electronic.
             </p>
-            <div class="doodle-arrow">→</div>
+
+            <div class="about-details">
+              <div class="detail-card">
+                <i class="fas fa-music"></i>
+                <div>
+                  <h4>Music Producer</h4>
+                  <p>Creating and producing tracks across multiple genres</p>
+                </div>
+              </div>
+              <div class="detail-card">
+                <i class="fas fa-code"></i>
+                <div>
+                  <h4>Web Developer</h4>
+                  <p>Building modern web applications with Vue.js & NestJS</p>
+                </div>
+              </div>
+              <div class="detail-card">
+                <i class="fas fa-guitar"></i>
+                <div>
+                  <h4>Multi-Instrumentalist</h4>
+                  <p>Guitar, bass, drums, and keyboard enthusiast</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="about-quote">
+              <i class="fas fa-quote-left"></i>
+              <p>"Music is the soundtrack of your life, code is the script."</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Music Section -->
+    <section id="music" class="section music-section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label">// My Music</span>
+          <h2 class="section-title">Bands & <span class="text-gradient">Projects</span></h2>
+          <p class="section-subtitle">Check out the bands I've been part of and my musical journey</p>
+        </div>
+
+        <div class="bands-grid">
+          <div v-for="band in bands" :key="band.name" class="band-card" @click="openBandLink(band.link)">
+            <div class="band-image">
+              <img :src="band.image" :alt="band.name" />
+              <div class="band-overlay">
+                <i class="fas fa-play-circle"></i>
+              </div>
+            </div>
+            <div class="band-info">
+              <h3 class="band-name">{{ band.name }}</h3>
+              <span class="band-role">{{ band.role }}</span>
+              <p class="band-genre">{{ band.genre }}</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="music-platforms">
+          <h4>Listen on</h4>
+          <div class="platform-links">
+            <a href="#" class="platform-link spotify">
+              <i class="fab fa-spotify"></i>
+              <span>Spotify</span>
+            </a>
+            <a href="#" class="platform-link apple">
+              <i class="fab fa-apple"></i>
+              <span>Apple Music</span>
+            </a>
+            <a href="#" class="platform-link youtube">
+              <i class="fab fa-youtube"></i>
+              <span>YouTube</span>
+            </a>
+            <a href="#" class="platform-link soundcloud">
+              <i class="fab fa-soundcloud"></i>
+              <span>SoundCloud</span>
+            </a>
           </div>
         </div>
       </div>
@@ -129,92 +180,25 @@
     <!-- Skills Section -->
     <section id="skills" class="section skills-section">
       <div class="container">
-        <h2 class="section-title">🛠️ My Toolkit</h2>
-        <p class="section-subtitle">Technologies I work with</p>
-
-        <div class="skills-notebook">
-          <div class="notebook-page">
-            <div class="notebook-holes">
-              <span></span><span></span><span></span>
-            </div>
-            <div class="notebook-content">
-              <div class="skill-category">
-                <h3 class="text-handwritten"><i class="fas fa-code ink-purple"></i> Languages</h3>
-                <div class="skill-tags">
-                  <span class="skill-tag">HTML</span>
-                  <span class="skill-tag">CSS</span>
-                  <span class="skill-tag">JavaScript</span>
-                  <span class="skill-tag">Python</span>
-                  <span class="skill-tag">Java</span>
-                  <span class="skill-tag">TypeScript</span>
-                </div>
-              </div>
-
-              <div class="skill-category">
-                <h3 class="text-handwritten"><i class="fas fa-layer-group ink-pink"></i> Frameworks</h3>
-                <div class="skill-tags">
-                  <span class="skill-tag">Vue.js</span>
-                  <span class="skill-tag">React</span>
-                  <span class="skill-tag">Nest.js</span>
-                  <span class="skill-tag">Node.js</span>
-                  <span class="skill-tag">Flask</span>
-                </div>
-              </div>
-
-              <div class="skill-category">
-                <h3 class="text-handwritten"><i class="fas fa-tools ink-blue"></i> Tools</h3>
-                <div class="skill-tags">
-                  <span class="skill-tag">Git/GitHub</span>
-                  <span class="skill-tag">VS Code</span>
-                  <span class="skill-tag">Supabase</span>
-                  <span class="skill-tag">Vercel</span>
-                  <span class="skill-tag">Figma</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Hobbies Section -->
-    <section id="hobbies" class="section hobbies-section">
-      <div class="container">
-        <h2 class="section-title">🎮 Fun Stuff</h2>
-        <p class="section-subtitle">What I do when I'm not coding</p>
-
-        <div class="hobbies-grid">
-          <div class="hobby-polaroid polaroid" style="transform: rotate(-3deg);">
-            <img src="https://images.unsplash.com/photo-1511379938547-c1f69419868d?auto=format&fit=crop&w=500&q=60" alt="Music" />
-            <div class="polaroid-caption">
-              <span class="hobby-icon">🎵</span> My Music
-            </div>
-          </div>
-
-          <div class="hobby-polaroid polaroid" style="transform: rotate(2deg);">
-            <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=500&q=60" alt="Gaming" />
-            <div class="polaroid-caption">
-              <span class="hobby-icon">🎮</span> Gaming
-            </div>
-          </div>
-
-          <div class="hobby-polaroid polaroid" style="transform: rotate(-1deg);">
-            <img src="https://images.unsplash.com/photo-1485846234645-a62644f84728?auto=format&fit=crop&w=500&q=60" alt="Movies" />
-            <div class="polaroid-caption">
-              <span class="hobby-icon">🎬</span> Movies
-            </div>
-          </div>
+        <div class="section-header">
+          <span class="section-label">// Skills</span>
+          <h2 class="section-title">Tech <span class="text-gradient">Stack</span></h2>
         </div>
 
-        <div class="hobbies-notes">
-          <div class="hobby-note sticky-note bg-orange" style="transform: rotate(-2deg);">
-            <p>🎸 Vibing to local scenes and discovering new sounds</p>
-          </div>
-          <div class="hobby-note sticky-note bg-purple" style="transform: rotate(3deg);">
-            <p>🎯 Valorant, League of Legends, Genshin Impact</p>
-          </div>
-          <div class="hobby-note sticky-note bg-pink" style="transform: rotate(-1deg);">
-            <p>🍿 Sci-Fi, Thrillers, and Anime enthusiast!</p>
+        <div class="skills-grid">
+          <div v-for="category in skillCategories" :key="category.name" class="skill-category">
+            <h3 class="category-title">
+              <i :class="category.icon"></i>
+              {{ category.name }}
+            </h3>
+            <div class="skills-list">
+              <div v-for="skill in category.skills" :key="skill.name" class="skill-item">
+                <div class="skill-icon">
+                  <i :class="skill.icon"></i>
+                </div>
+                <span class="skill-name">{{ skill.name }}</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -223,61 +207,108 @@
     <!-- Gallery Section -->
     <section id="gallery" class="section gallery-section">
       <div class="container">
-        <h2 class="section-title">📸 Gallery</h2>
-        <p class="section-subtitle">Click to view! ✨</p>
+        <div class="section-header">
+          <span class="section-label">// Gallery</span>
+          <h2 class="section-title">Captured <span class="text-gradient">Moments</span></h2>
+          <p class="section-subtitle">Photos from gigs, studio sessions, and life moments</p>
+        </div>
 
-        <div class="gallery-scrapbook">
+        <!-- Gallery Categories -->
+        <div class="gallery-tabs">
+          <button 
+            v-for="tab in galleryTabs" 
+            :key="tab.id"
+            class="gallery-tab"
+            :class="{ active: activeTab === tab.id }"
+            @click="activeTab = tab.id"
+          >
+            <i :class="tab.icon"></i>
+            {{ tab.name }}
+          </button>
+        </div>
+
+        <!-- Gallery Grid -->
+        <div class="gallery-grid">
           <div 
-            v-for="(image, index) in galleryImages" 
-            :key="index" 
-            class="gallery-polaroid polaroid"
-            :style="{ transform: getRandomRotation(index) }"
+            v-for="(image, index) in filteredGallery" 
+            :key="image.id"
+            class="gallery-item"
+            :class="image.size"
             @click="openLightbox(index)"
           >
-            <img :src="image.src" :alt="image.title" />
-            <p class="polaroid-caption">{{ image.title }}</p>
-            <div class="washi-tape" :class="getWashiColor(index)" style="top: -10px;"></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Lightbox -->
-      <Teleport to="body">
-        <Transition name="fade">
-          <div v-if="lightboxOpen" class="lightbox" @click="closeLightbox">
-            <button class="lightbox-close" @click.stop="closeLightbox">
-              <i class="fas fa-times"></i>
-            </button>
-            <button class="lightbox-nav prev" @click.stop="prevImage">
-              <i class="fas fa-chevron-left"></i>
-            </button>
-            <div class="lightbox-content" @click.stop>
-              <div class="lightbox-polaroid polaroid">
-                <img :src="galleryImages[currentImageIndex].src" :alt="galleryImages[currentImageIndex].title" />
-                <p class="polaroid-caption text-handwritten">{{ galleryImages[currentImageIndex].title }}</p>
-              </div>
+            <img :src="image.src" :alt="image.caption" />
+            <div class="gallery-overlay">
+              <span class="gallery-caption">{{ image.caption }}</span>
+              <i class="fas fa-expand"></i>
             </div>
-            <button class="lightbox-nav next" @click.stop="nextImage">
-              <i class="fas fa-chevron-right"></i>
-            </button>
           </div>
-        </Transition>
-      </Teleport>
-    </section>
+        </div>
 
-    <!-- Connect CTA Section -->
-    <section class="section cta-section">
-      <div class="container">
-        <div class="cta-card sticky-note bg-yellow" style="transform: rotate(-1deg);">
-          <div class="note-pin gold"></div>
-          <h2 class="text-handwritten cta-title">Let's Connect! 💬</h2>
-          <p class="cta-text">Got something to say? Leave a message in my guestbook!</p>
-          <router-link to="/guestbook" class="btn btn-primary">
-            <i class="fas fa-pen-fancy"></i> Sign Guestbook
-          </router-link>
+        <!-- Add Photo Button (for editing) -->
+        <div class="gallery-actions">
+          <button class="btn btn-secondary" @click="showUploadModal = true">
+            <i class="fas fa-plus"></i>
+            Add Photo
+          </button>
         </div>
       </div>
     </section>
+
+    <!-- Lightbox -->
+    <div class="lightbox" :class="{ active: lightboxOpen }" @click.self="closeLightbox">
+      <div class="lightbox-content" v-if="lightboxOpen">
+        <button class="lightbox-close" @click="closeLightbox">
+          <i class="fas fa-times"></i>
+        </button>
+        <button class="lightbox-nav lightbox-prev" @click="prevImage">
+          <i class="fas fa-chevron-left"></i>
+        </button>
+        <div class="lightbox-image-container">
+          <img :src="filteredGallery[lightboxIndex]?.src" :alt="filteredGallery[lightboxIndex]?.caption" />
+        </div>
+        <button class="lightbox-nav lightbox-next" @click="nextImage">
+          <i class="fas fa-chevron-right"></i>
+        </button>
+        <div class="lightbox-info">
+          <p>{{ filteredGallery[lightboxIndex]?.caption }}</p>
+          <span>{{ lightboxIndex + 1 }} / {{ filteredGallery.length }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Upload Modal -->
+    <div class="modal-overlay" v-if="showUploadModal" @click.self="showUploadModal = false">
+      <div class="modal">
+        <div class="modal-header">
+          <h3>Add New Photo</h3>
+          <button class="modal-close" @click="showUploadModal = false">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label>Image URL</label>
+            <input v-model="newPhoto.src" type="text" class="input-field" placeholder="https://example.com/image.jpg" />
+          </div>
+          <div class="form-group">
+            <label>Caption</label>
+            <input v-model="newPhoto.caption" type="text" class="input-field" placeholder="Describe this photo..." />
+          </div>
+          <div class="form-group">
+            <label>Category</label>
+            <select v-model="newPhoto.category" class="input-field">
+              <option value="gigs">Gigs</option>
+              <option value="studio">Studio</option>
+              <option value="life">Life</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-ghost" @click="showUploadModal = false">Cancel</button>
+          <button class="btn btn-primary" @click="addPhoto">Add Photo</button>
+        </div>
+      </div>
+    </div>
   </main>
 </template>
 
@@ -286,93 +317,117 @@ export default {
   name: 'Home',
   data() {
     return {
-      typingText: '',
-      phrases: ['Web Developer', 'UI/UX Enthusiast', 'Tech Explorer', 'Problem Solver'],
-      currentPhrase: 0,
-      charIndex: 0,
-      isDeleting: false,
+      activeTab: 'all',
       lightboxOpen: false,
-      currentImageIndex: 0,
-      galleryImages: [
+      lightboxIndex: 0,
+      showUploadModal: false,
+      newPhoto: {
+        src: '',
+        caption: '',
+        category: 'gigs'
+      },
+      bands: [
         {
-          src: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=60',
-          title: 'Coding vibes 💻'
+          name: 'Band Name 1',
+          role: 'Lead Guitarist',
+          genre: 'Indie Rock',
+          image: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop',
+          link: '#'
         },
         {
-          src: 'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=800&q=60',
-          title: 'My buddy 🐱'
+          name: 'Band Name 2',
+          role: 'Bassist / Vocals',
+          genre: 'Alternative',
+          image: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=400&h=400&fit=crop',
+          link: '#'
         },
         {
-          src: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=800&q=60',
-          title: 'Late nights ☕'
-        },
-        {
-          src: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=800&q=60',
-          title: 'Workspace 🖥️'
-        },
-        {
-          src: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=800&q=60',
-          title: 'Building 🔨'
-        },
-        {
-          src: 'https://images.unsplash.com/photo-1504639725590-34d0984388bd?auto=format&fit=crop&w=800&q=60',
-          title: 'Learning 📖'
+          name: 'Solo Project',
+          role: 'Producer',
+          genre: 'Electronic',
+          image: 'https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?w=400&h=400&fit=crop',
+          link: '#'
         }
+      ],
+      skillCategories: [
+        {
+          name: 'Frontend',
+          icon: 'fas fa-laptop-code',
+          skills: [
+            { name: 'Vue.js', icon: 'fab fa-vuejs' },
+            { name: 'JavaScript', icon: 'fab fa-js' },
+            { name: 'HTML/CSS', icon: 'fab fa-html5' },
+            { name: 'Tailwind', icon: 'fas fa-wind' }
+          ]
+        },
+        {
+          name: 'Backend',
+          icon: 'fas fa-server',
+          skills: [
+            { name: 'NestJS', icon: 'fab fa-node-js' },
+            { name: 'Node.js', icon: 'fab fa-node' },
+            { name: 'Python', icon: 'fab fa-python' },
+            { name: 'PostgreSQL', icon: 'fas fa-database' }
+          ]
+        },
+        {
+          name: 'Music Production',
+          icon: 'fas fa-sliders-h',
+          skills: [
+            { name: 'FL Studio', icon: 'fas fa-music' },
+            { name: 'Ableton', icon: 'fas fa-headphones' },
+            { name: 'Pro Tools', icon: 'fas fa-microphone' },
+            { name: 'Mixing', icon: 'fas fa-sliders-h' }
+          ]
+        },
+        {
+          name: 'Tools',
+          icon: 'fas fa-tools',
+          skills: [
+            { name: 'Git', icon: 'fab fa-git-alt' },
+            { name: 'Docker', icon: 'fab fa-docker' },
+            { name: 'Figma', icon: 'fab fa-figma' },
+            { name: 'VS Code', icon: 'fas fa-code' }
+          ]
+        }
+      ],
+      galleryTabs: [
+        { id: 'all', name: 'All', icon: 'fas fa-th' },
+        { id: 'gigs', name: 'Gigs', icon: 'fas fa-guitar' },
+        { id: 'studio', name: 'Studio', icon: 'fas fa-microphone' },
+        { id: 'life', name: 'Life', icon: 'fas fa-heart' }
+      ],
+      gallery: [
+        { id: 1, src: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=600&h=600&fit=crop', caption: 'Live performance', category: 'gigs', size: 'large' },
+        { id: 2, src: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=400&h=400&fit=crop', caption: 'Studio session', category: 'studio', size: '' },
+        { id: 3, src: 'https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?w=400&h=400&fit=crop', caption: 'Behind the scenes', category: 'life', size: '' },
+        { id: 4, src: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=400&h=400&fit=crop', caption: 'Concert night', category: 'gigs', size: '' },
+        { id: 5, src: 'https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=600&h=600&fit=crop', caption: 'Recording vocals', category: 'studio', size: 'large' },
+        { id: 6, src: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=400&h=400&fit=crop', caption: 'Band practice', category: 'gigs', size: '' }
       ]
     }
   },
+  computed: {
+    filteredGallery() {
+      if (this.activeTab === 'all') return this.gallery
+      return this.gallery.filter(img => img.category === this.activeTab)
+    }
+  },
   mounted() {
-    this.typeEffect()
-    this.initScrollReveal()
+    // Load saved gallery from localStorage
+    const savedGallery = localStorage.getItem('crate-gallery')
+    if (savedGallery) {
+      this.gallery = JSON.parse(savedGallery)
+    }
   },
   methods: {
-    typeEffect() {
-      const currentText = this.phrases[this.currentPhrase]
-      
-      if (this.isDeleting) {
-        this.typingText = currentText.substring(0, this.charIndex - 1)
-        this.charIndex--
-      } else {
-        this.typingText = currentText.substring(0, this.charIndex + 1)
-        this.charIndex++
+    openBandLink(link) {
+      if (link && link !== '#') {
+        window.open(link, '_blank')
       }
-
-      let typeSpeed = this.isDeleting ? 50 : 100
-
-      if (!this.isDeleting && this.charIndex === currentText.length) {
-        typeSpeed = 2000
-        this.isDeleting = true
-      } else if (this.isDeleting && this.charIndex === 0) {
-        this.isDeleting = false
-        this.currentPhrase = (this.currentPhrase + 1) % this.phrases.length
-        typeSpeed = 500
-      }
-
-      setTimeout(this.typeEffect, typeSpeed)
-    },
-    initScrollReveal() {
-      const reveals = document.querySelectorAll('.bento-card, .polaroid, .skill-category')
-      
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('revealed')
-          }
-        })
-      }, { threshold: 0.1 })
-      
-      reveals.forEach(el => observer.observe(el))
-    },
-    getRandomRotation(index) {
-      const rotations = [-4, 2, -2, 3, -1, 4]
-      return `rotate(${rotations[index % rotations.length]}deg)`
-    },
-    getWashiColor(index) {
-      const colors = ['pink', 'blue', 'yellow', 'mint', 'purple']
-      return colors[index % colors.length]
     },
     openLightbox(index) {
-      this.currentImageIndex = index
+      this.lightboxIndex = index
       this.lightboxOpen = true
       document.body.style.overflow = 'hidden'
     },
@@ -380,11 +435,33 @@ export default {
       this.lightboxOpen = false
       document.body.style.overflow = ''
     },
-    prevImage() {
-      this.currentImageIndex = (this.currentImageIndex - 1 + this.galleryImages.length) % this.galleryImages.length
-    },
     nextImage() {
-      this.currentImageIndex = (this.currentImageIndex + 1) % this.galleryImages.length
+      this.lightboxIndex = (this.lightboxIndex + 1) % this.filteredGallery.length
+    },
+    prevImage() {
+      this.lightboxIndex = this.lightboxIndex === 0 
+        ? this.filteredGallery.length - 1 
+        : this.lightboxIndex - 1
+    },
+    addPhoto() {
+      if (!this.newPhoto.src || !this.newPhoto.caption) {
+        alert('Please fill in all fields')
+        return
+      }
+      
+      const photo = {
+        id: Date.now(),
+        src: this.newPhoto.src,
+        caption: this.newPhoto.caption,
+        category: this.newPhoto.category,
+        size: ''
+      }
+      
+      this.gallery.unshift(photo)
+      localStorage.setItem('crate-gallery', JSON.stringify(this.gallery))
+      
+      this.newPhoto = { src: '', caption: '', category: 'gigs' }
+      this.showUploadModal = false
     }
   }
 }
@@ -397,704 +474,745 @@ export default {
   display: flex;
   align-items: center;
   position: relative;
-  padding-top: 100px;
-  padding-bottom: 60px;
   overflow: hidden;
+  padding-top: var(--nav-height);
 }
 
-.floating-doodles {
-  position: fixed;
+.hero-bg {
+  position: absolute;
   inset: 0;
   pointer-events: none;
-  z-index: 0;
 }
 
 .hero-content {
   display: grid;
-  grid-template-columns: 1.2fr 1fr;
-  gap: 4rem;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
   align-items: center;
-  position: relative;
-  z-index: 1;
 }
 
-.hero-text {
-  position: relative;
+.hero-label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
 }
 
-.hero-tape {
-  position: absolute;
-  top: -20px;
-  left: -30px;
-  width: 80px;
-  height: 25px;
+.label-line {
+  width: 40px;
+  height: 2px;
+  background: var(--accent-primary);
 }
 
-.hero-wave {
-  font-size: 3rem;
-  display: inline-block;
-  animation: wave 2s infinite;
-  transform-origin: 70% 70%;
-}
-
-@keyframes wave {
-  0%, 100% { transform: rotate(0deg); }
-  25% { transform: rotate(20deg); }
-  75% { transform: rotate(-10deg); }
+.hero-label span:last-child {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  color: var(--accent-primary);
+  letter-spacing: 1px;
 }
 
 .hero-title {
-  font-size: 3.5rem;
-  line-height: 1.2;
-  margin: 1rem 0;
-  color: var(--ink-dark);
-}
-
-.hero-title .highlight {
-  color: var(--ink-purple);
-  position: relative;
-}
-
-.hero-title .highlight::after {
-  content: '';
-  position: absolute;
-  bottom: 5px;
-  left: 0;
-  width: 100%;
-  height: 8px;
-  background: var(--washi-yellow);
-  z-index: -1;
-  transform: skewX(-5deg);
-}
-
-.hero-subtitle {
-  font-size: 2rem;
-  color: var(--ink-medium);
-  margin-bottom: 1.5rem;
-  min-height: 2.5rem;
-}
-
-.typing-wrapper {
-  display: inline-flex;
-  align-items: center;
-}
-
-.cursor {
-  margin-left: 2px;
-  animation: blink 1s ease infinite;
-  color: var(--ink-purple);
-  font-weight: 100;
-}
-
-@keyframes blink {
-  0%, 50% { opacity: 1; }
-  51%, 100% { opacity: 0; }
+  font-size: clamp(3rem, 6vw, 5rem);
+  font-weight: 700;
+  line-height: 1.1;
+  margin-bottom: 24px;
 }
 
 .hero-description {
-  font-size: 1.1rem;
-  color: var(--ink-medium);
+  font-size: 1.2rem;
+  color: var(--text-secondary);
   max-width: 500px;
-  margin-bottom: 2rem;
-  line-height: 1.8;
+  margin-bottom: 32px;
+  line-height: 1.7;
 }
 
-.hero-description strong {
-  color: var(--ink-purple);
-}
-
-.hero-buttons {
+.hero-actions {
   display: flex;
-  gap: 1rem;
-  margin-bottom: 2rem;
-  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 48px;
 }
 
-.hero-social {
-  display: flex;
-  gap: 1rem;
-}
-
-.social-link {
-  width: 48px;
-  height: 48px;
-  background: var(--paper-white);
-  border: 2px dashed var(--ink-light);
-  border-radius: 12px;
+.hero-stats {
   display: flex;
   align-items: center;
-  justify-content: center;
-  color: var(--ink-medium);
-  font-size: 1.2rem;
-  transition: var(--transition-bounce);
+  gap: 32px;
 }
 
-.social-link:hover {
-  background: var(--ink-purple);
-  border-color: var(--ink-purple);
-  border-style: solid;
-  color: white;
-  transform: translateY(-5px) rotate(-5deg);
+.stat {
+  text-align: center;
 }
 
-.hero-image {
+.stat-value {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.stat-label {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.stat-divider {
+  width: 1px;
+  height: 40px;
+  background: var(--border-color);
+}
+
+/* Vinyl Visual */
+.hero-visual {
   display: flex;
   justify-content: center;
+  align-items: center;
+}
+
+.vinyl-container {
   position: relative;
+  width: 400px;
+  height: 400px;
 }
 
-.hero-polaroid {
-  width: 320px;
-  animation: float 4s ease-in-out infinite;
+.vinyl-record {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1a1a2e 0%, #0f0f1a 100%);
+  position: relative;
+  animation: spin-slow 10s linear infinite;
+  box-shadow: 
+    0 0 0 10px rgba(139, 92, 246, 0.1),
+    0 0 60px rgba(139, 92, 246, 0.3),
+    inset 0 0 80px rgba(0, 0, 0, 0.5);
 }
 
-.hero-tape-2 {
+.vinyl-grooves {
   position: absolute;
-  top: -15px;
-  right: 30px;
-  width: 90px;
+  inset: 20px;
+  border-radius: 50%;
+  background: repeating-radial-gradient(
+    circle at center,
+    transparent 0px,
+    transparent 2px,
+    rgba(255, 255, 255, 0.03) 3px,
+    transparent 4px
+  );
 }
 
+.vinyl-label {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.5);
+}
+
+.vinyl-label img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.vinyl-arm {
+  position: absolute;
+  top: -20px;
+  right: 40px;
+  width: 150px;
+  height: 8px;
+  background: linear-gradient(90deg, #333, #666);
+  border-radius: 4px;
+  transform-origin: right center;
+  transform: rotate(25deg);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.vinyl-arm::before {
+  content: '';
+  position: absolute;
+  right: -10px;
+  top: -10px;
+  width: 28px;
+  height: 28px;
+  background: #444;
+  border-radius: 50%;
+}
+
+.vinyl-arm::after {
+  content: '';
+  position: absolute;
+  left: -5px;
+  top: -2px;
+  width: 15px;
+  height: 12px;
+  background: linear-gradient(180deg, #888, #444);
+  clip-path: polygon(0 0, 100% 50%, 0 100%);
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Scroll Indicator */
 .scroll-indicator {
   position: absolute;
-  bottom: 30px;
+  bottom: 40px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.5rem;
-  color: var(--ink-medium);
-  font-size: 1.2rem;
-  animation: bounce 2s ease infinite;
+  gap: 8px;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  animation: bounce 2s infinite;
 }
 
-.scroll-indicator i {
-  font-size: 1rem;
+@keyframes bounce {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(10px); }
 }
 
 /* About Section */
 .about-section {
-  background: linear-gradient(180deg, transparent 0%, rgba(255, 184, 198, 0.1) 100%);
+  background: var(--bg-secondary);
 }
 
-.about-bento {
+.about-content {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 2rem;
+  grid-template-columns: 400px 1fr;
+  gap: 60px;
+  align-items: center;
 }
 
-.bento-card {
-  padding: 2rem;
+.image-frame {
   position: relative;
-  opacity: 0;
-  transform: translateY(30px);
-  transition: all 0.6s ease;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
 }
 
-.bento-card.revealed {
-  opacity: 1;
-  transform: translateY(0) rotate(var(--rotation, -2deg));
+.image-frame img {
+  width: 100%;
+  height: auto;
+  display: block;
 }
 
-.note-pin {
+.frame-accent {
   position: absolute;
-  top: -8px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 20px;
-  height: 20px;
-  background: linear-gradient(135deg, #e74c3c, #c0392b);
-  border-radius: 50%;
-  box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+  inset: 0;
+  border: 3px solid var(--accent-primary);
+  border-radius: var(--radius-lg);
+  transform: translate(15px, 15px);
+  z-index: -1;
 }
 
-.note-pin.gold {
-  background: linear-gradient(135deg, #f1c40f, #e67e22);
+.about-intro {
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+  line-height: 1.8;
+  margin-bottom: 32px;
 }
 
-.card-title {
-  font-family: var(--font-handwritten);
-  font-size: 1.8rem;
-  margin-bottom: 1rem;
-  color: var(--ink-dark);
-}
-
-.card-title i {
-  margin-right: 0.5rem;
-}
-
-.card-list {
+.about-details {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 20px;
+  margin-bottom: 32px;
 }
 
-.card-list li {
-  font-size: 1rem;
-  color: var(--ink-medium);
-  padding-left: 0.5rem;
+.detail-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 20px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  transition: var(--transition-smooth);
 }
 
-.card-text {
-  color: var(--ink-medium);
-  line-height: 1.7;
+.detail-card:hover {
+  border-color: var(--accent-primary);
+  transform: translateX(10px);
 }
 
-.school-logo {
-  width: 60px;
-  margin-top: 1rem;
-  border-radius: 8px;
-}
-
-.bento-card.featured {
-  grid-column: span 2;
+.detail-card i {
+  font-size: 1.5rem;
+  color: var(--accent-primary);
+  width: 40px;
   text-align: center;
 }
 
-.doodle-arrow {
-  font-family: var(--font-handwritten);
-  font-size: 3rem;
-  color: var(--ink-purple);
-  margin-top: 1rem;
-  animation: bounce 2s ease infinite;
-}
-
-/* Skills Section */
-.skills-section {
-  background: linear-gradient(180deg, rgba(255, 184, 198, 0.1) 0%, rgba(168, 216, 234, 0.1) 100%);
-}
-
-.skills-notebook {
-  max-width: 800px;
-  margin: 0 auto;
-}
-
-.notebook-page {
-  background: var(--paper-white);
-  border-radius: 0 20px 20px 0;
-  padding: 3rem;
-  position: relative;
-  box-shadow: var(--shadow-polaroid);
-  border-left: 4px solid var(--ink-red);
-}
-
-.notebook-page::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 60px;
-  background: repeating-linear-gradient(
-    transparent,
-    transparent 28px,
-    var(--washi-blue) 28px,
-    var(--washi-blue) 30px
-  );
-  opacity: 0.3;
-}
-
-.notebook-holes {
-  position: absolute;
-  left: 20px;
-  top: 50%;
-  transform: translateY(-50%);
-  display: flex;
-  flex-direction: column;
-  gap: 60px;
-}
-
-.notebook-holes span {
-  width: 16px;
-  height: 16px;
-  background: var(--paper-cream);
-  border-radius: 50%;
-  border: 2px solid var(--ink-light);
-}
-
-.notebook-content {
-  margin-left: 50px;
-}
-
-.skill-category {
-  margin-bottom: 2rem;
-  padding-bottom: 2rem;
-  border-bottom: 2px dashed var(--ink-light);
-  opacity: 0;
-  transform: translateX(-20px);
-  transition: all 0.5s ease;
-}
-
-.skill-category.revealed {
-  opacity: 1;
-  transform: translateX(0);
-}
-
-.skill-category:last-child {
-  border-bottom: none;
-  margin-bottom: 0;
-  padding-bottom: 0;
-}
-
-.skill-category h3 {
-  font-size: 1.8rem;
-  margin-bottom: 1rem;
-  color: var(--ink-dark);
-}
-
-.skill-category h3 i {
-  margin-right: 0.5rem;
-}
-
-.skill-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-}
-
-.skill-tag {
-  background: var(--paper-cream);
-  padding: 10px 20px;
-  border-radius: 25px;
-  font-size: 0.95rem;
-  color: var(--ink-dark);
-  border: 2px dashed transparent;
-  transition: var(--transition-smooth);
-  cursor: default;
-}
-
-.skill-tag:hover {
-  background: var(--ink-purple);
-  color: white;
-  border-color: var(--ink-purple);
-  transform: translateY(-3px) rotate(-2deg);
-}
-
-/* Hobbies Section */
-.hobbies-section {
-  background: linear-gradient(180deg, rgba(168, 216, 234, 0.1) 0%, transparent 100%);
-}
-
-.hobbies-grid {
-  display: flex;
-  justify-content: center;
-  gap: 2rem;
-  flex-wrap: wrap;
-  margin-bottom: 3rem;
-}
-
-.hobby-polaroid {
-  width: 280px;
-  cursor: pointer;
-  opacity: 0;
-  transition: all 0.6s ease;
-}
-
-.hobby-polaroid.revealed {
-  opacity: 1;
-}
-
-.hobby-polaroid img {
-  height: 250px;
-}
-
-.hobby-icon {
-  font-size: 1.3rem;
-  margin-right: 0.25rem;
-}
-
-.hobbies-notes {
-  display: flex;
-  justify-content: center;
-  gap: 1.5rem;
-  flex-wrap: wrap;
-}
-
-.hobby-note {
-  padding: 1.5rem;
-  max-width: 280px;
+.detail-card h4 {
   font-size: 1rem;
-  color: var(--ink-medium);
+  color: var(--text-primary);
+  margin-bottom: 4px;
 }
 
-/* Gallery Section */
-.gallery-section {
-  background: linear-gradient(180deg, transparent 0%, rgba(255, 234, 167, 0.15) 100%);
+.detail-card p {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin: 0;
 }
 
-.gallery-scrapbook {
+.about-quote {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 24px;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), transparent);
+  border-left: 3px solid var(--accent-primary);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+}
+
+.about-quote i {
+  color: var(--accent-primary);
+  font-size: 1.5rem;
+}
+
+.about-quote p {
+  font-size: 1.1rem;
+  font-style: italic;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+/* Music Section */
+.bands-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+  margin-bottom: 48px;
 }
 
-.gallery-polaroid {
+.band-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
   cursor: pointer;
-  opacity: 0;
-  transition: all 0.6s ease;
+  transition: var(--transition-smooth);
+}
+
+.band-card:hover {
+  border-color: var(--accent-primary);
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-glow);
+}
+
+.band-image {
   position: relative;
+  aspect-ratio: 1;
+  overflow: hidden;
 }
 
-.gallery-polaroid.revealed {
-  opacity: 1;
+.band-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
 }
 
-.gallery-polaroid img {
-  height: 200px;
+.band-card:hover .band-image img {
+  transform: scale(1.1);
 }
 
-.gallery-polaroid .washi-tape {
+.band-overlay {
   position: absolute;
-  width: 80px;
-  height: 20px;
-  left: 50%;
-  transform: translateX(-50%) rotate(-5deg);
-}
-
-/* Lightbox */
-.lightbox {
-  position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.9);
-  z-index: 2000;
+  background: rgba(0, 0, 0, 0.5);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 2rem;
-}
-
-.lightbox-content {
-  display: flex;
-  justify-content: center;
-}
-
-.lightbox-polaroid {
-  max-width: 500px;
-  padding: 20px 20px 60px 20px;
-}
-
-.lightbox-polaroid img {
-  max-height: 60vh;
-  object-fit: contain;
-}
-
-.lightbox-polaroid .polaroid-caption {
-  font-size: 1.5rem;
-}
-
-.lightbox-close {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  width: 50px;
-  height: 50px;
-  background: var(--paper-white);
-  border: none;
-  border-radius: 12px;
-  color: var(--ink-dark);
-  font-size: 1.5rem;
-  cursor: pointer;
-  transition: var(--transition-smooth);
-}
-
-.lightbox-close:hover {
-  background: var(--ink-purple);
-  color: white;
-  transform: rotate(90deg);
-}
-
-.lightbox-nav {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 50px;
-  height: 50px;
-  background: var(--paper-white);
-  border: none;
-  border-radius: 12px;
-  color: var(--ink-dark);
-  font-size: 1.2rem;
-  cursor: pointer;
-  transition: var(--transition-smooth);
-}
-
-.lightbox-nav:hover {
-  background: var(--ink-purple);
-  color: white;
-}
-
-.lightbox-nav.prev {
-  left: 20px;
-}
-
-.lightbox-nav.next {
-  right: 20px;
-}
-
-.fade-enter-active,
-.fade-leave-active {
+  opacity: 0;
   transition: opacity 0.3s ease;
 }
 
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
+.band-card:hover .band-overlay {
+  opacity: 1;
 }
 
-/* CTA Section */
-.cta-section {
-  padding-bottom: 100px;
+.band-overlay i {
+  font-size: 4rem;
+  color: var(--accent-primary);
 }
 
-.cta-card {
-  max-width: 600px;
-  margin: 0 auto;
+.band-info {
+  padding: 20px;
+}
+
+.band-name {
+  font-size: 1.25rem;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.band-role {
+  font-size: 0.9rem;
+  color: var(--accent-primary);
+}
+
+.band-genre {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-top: 8px;
+}
+
+/* Music Platforms */
+.music-platforms {
   text-align: center;
-  padding: 3rem;
+  padding: 40px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
 }
 
-.cta-title {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
-  color: var(--ink-dark);
+.music-platforms h4 {
+  font-size: 1rem;
+  color: var(--text-muted);
+  margin-bottom: 20px;
 }
 
-.cta-text {
+.platform-links {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.platform-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 24px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  transition: var(--transition-base);
+}
+
+.platform-link:hover {
+  color: var(--text-primary);
+  transform: translateY(-3px);
+}
+
+.platform-link.spotify:hover { border-color: #1DB954; color: #1DB954; }
+.platform-link.apple:hover { border-color: #fc3c44; color: #fc3c44; }
+.platform-link.youtube:hover { border-color: #FF0000; color: #FF0000; }
+.platform-link.soundcloud:hover { border-color: #ff5500; color: #ff5500; }
+
+/* Skills Section */
+.skills-section {
+  background: var(--bg-secondary);
+}
+
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 24px;
+}
+
+.skill-category {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+}
+
+.category-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   font-size: 1.1rem;
-  color: var(--ink-medium);
-  margin-bottom: 2rem;
+  color: var(--text-primary);
+  margin-bottom: 20px;
+}
+
+.category-title i {
+  color: var(--accent-primary);
+}
+
+.skills-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.skill-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  background: var(--bg-elevated);
+  border-radius: var(--radius-md);
+  transition: var(--transition-fast);
+}
+
+.skill-item:hover {
+  background: var(--bg-hover);
+  transform: translateX(5px);
+}
+
+.skill-icon {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(139, 92, 246, 0.1);
+  border-radius: 8px;
+  color: var(--accent-primary);
+  font-size: 0.9rem;
+}
+
+.skill-name {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+/* Gallery Section */
+.gallery-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+}
+
+.gallery-tab {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: var(--transition-base);
+}
+
+.gallery-tab:hover {
+  border-color: var(--accent-primary);
+  color: var(--text-primary);
+}
+
+.gallery-tab.active {
+  background: var(--accent-primary);
+  border-color: var(--accent-primary);
+  color: white;
+}
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+  margin-bottom: 32px;
+}
+
+.gallery-item {
+  aspect-ratio: 1;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+}
+
+.gallery-item.large {
+  grid-column: span 2;
+  grid-row: span 2;
+}
+
+.gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.gallery-item:hover img {
+  transform: scale(1.1);
+}
+
+.gallery-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 20px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.gallery-item:hover .gallery-overlay {
+  opacity: 1;
+}
+
+.gallery-caption {
+  color: white;
+  font-size: 0.95rem;
+  margin-bottom: 8px;
+}
+
+.gallery-overlay i {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 2rem;
+  color: white;
+}
+
+.gallery-actions {
+  text-align: center;
+}
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 20px;
+}
+
+.modal {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  width: 100%;
+  max-width: 450px;
+  overflow: hidden;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.modal-header h3 {
+  font-size: 1.2rem;
+  color: var(--text-primary);
+}
+
+.modal-close {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-elevated);
+  border-radius: 50%;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.modal-close:hover {
+  background: var(--accent-primary);
+  color: white;
+}
+
+.modal-body {
+  padding: 20px;
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 20px;
+  border-top: 1px solid var(--border-color);
 }
 
 /* Responsive */
-@media (max-width: 992px) {
+@media (max-width: 900px) {
   .hero-content {
     grid-template-columns: 1fr;
     text-align: center;
-    gap: 3rem;
   }
-
+  
   .hero-text {
     order: 2;
   }
-
-  .hero-image {
+  
+  .hero-visual {
     order: 1;
   }
-
-  .hero-title {
-    font-size: 2.8rem;
-  }
-
-  .hero-subtitle {
-    font-size: 1.6rem;
-  }
-
-  .hero-description {
-    max-width: 100%;
-  }
-
-  .hero-buttons {
-    justify-content: center;
-  }
-
-  .hero-social {
-    justify-content: center;
-  }
-
-  .hero-polaroid {
+  
+  .vinyl-container {
     width: 280px;
+    height: 280px;
   }
-
-  .about-bento {
+  
+  .hero-actions {
+    justify-content: center;
+  }
+  
+  .hero-stats {
+    justify-content: center;
+  }
+  
+  .about-content {
     grid-template-columns: 1fr;
   }
-
-  .bento-card.featured {
-    grid-column: span 1;
-  }
-
-  .gallery-scrapbook {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 768px) {
-  .hero {
-    padding-top: 80px;
-  }
-
-  .hero-title {
-    font-size: 2.2rem;
-  }
-
-  .hero-subtitle {
-    font-size: 1.3rem;
-  }
-
-  .hero-polaroid {
-    width: 240px;
-  }
-
-  .hero-buttons {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .notebook-content {
-    margin-left: 30px;
-  }
-
-  .notebook-holes {
-    left: 10px;
-  }
-
-  .hobbies-grid {
-    gap: 1.5rem;
-  }
-
-  .hobby-polaroid {
-    width: 240px;
-  }
-
-  .hobby-polaroid img {
-    height: 200px;
-  }
-
-  .gallery-scrapbook {
-    grid-template-columns: 1fr;
+  
+  .about-image {
     max-width: 350px;
     margin: 0 auto;
   }
-
-  .scroll-indicator {
-    display: none;
-  }
-
-  .floating-doodles {
-    display: none;
+  
+  .gallery-item.large {
+    grid-column: span 1;
+    grid-row: span 1;
   }
 }
 
-@media (max-width: 480px) {
-  .hero-title {
-    font-size: 1.8rem;
+@media (max-width: 600px) {
+  .hero-actions {
+    flex-direction: column;
   }
-
-  .hero-polaroid {
-    width: 200px;
+  
+  .hero-stats {
+    flex-direction: column;
+    gap: 16px;
   }
-
-  .notebook-page {
-    padding: 2rem 1.5rem;
+  
+  .stat-divider {
+    width: 40px;
+    height: 1px;
   }
-
-  .cta-card {
-    padding: 2rem 1.5rem;
-  }
-
-  .cta-title {
-    font-size: 2rem;
+  
+  .platform-links {
+    flex-direction: column;
+    align-items: center;
   }
 }
 </style>

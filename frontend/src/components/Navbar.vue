@@ -4,44 +4,87 @@
       <div class="navbar-content">
         <!-- Logo -->
         <router-link to="/" class="logo">
-          <span class="logo-icon">📓</span>
-          <span class="logo-text text-handwritten">Crate</span>
-          <span class="logo-accent">.journal</span>
+          <div class="logo-vinyl">
+            <span class="vinyl-inner"></span>
+          </div>
+          <div class="logo-text">
+            <span class="logo-name">CRATE</span>
+            <span class="logo-tagline">STUDIO</span>
+          </div>
         </router-link>
 
-        <!-- Mobile Toggle -->
-        <button class="mobile-toggle" @click="toggleMobileMenu" aria-label="Toggle menu">
-          <span :class="{ open: isMobileMenuOpen }"></span>
-        </button>
-
-        <!-- Nav Links -->
-        <ul class="nav-links" :class="{ active: isMobileMenuOpen }">
+        <!-- Desktop Nav -->
+        <ul class="nav-links">
           <li>
-            <router-link to="/" @click="closeMobileMenu" class="nav-link">
-              <i class="fas fa-home"></i> Home
+            <router-link to="/" class="nav-link">
+              <span class="nav-icon"><i class="fas fa-home"></i></span>
+              <span class="nav-text">Home</span>
             </router-link>
           </li>
           <li>
-            <a href="/#about" @click="closeMobileMenu" class="nav-link">
-              <i class="fas fa-user"></i> About
+            <a href="/#about" class="nav-link">
+              <span class="nav-icon"><i class="fas fa-user"></i></span>
+              <span class="nav-text">About</span>
             </a>
           </li>
           <li>
-            <a href="/#skills" @click="closeMobileMenu" class="nav-link">
-              <i class="fas fa-code"></i> Skills
+            <a href="/#music" class="nav-link">
+              <span class="nav-icon"><i class="fas fa-music"></i></span>
+              <span class="nav-text">Music</span>
             </a>
           </li>
           <li>
-            <a href="/#gallery" @click="closeMobileMenu" class="nav-link">
-              <i class="fas fa-images"></i> Gallery
+            <a href="/#gallery" class="nav-link">
+              <span class="nav-icon"><i class="fas fa-images"></i></span>
+              <span class="nav-text">Gallery</span>
             </a>
           </li>
           <li>
-            <router-link to="/guestbook" @click="closeMobileMenu" class="nav-link nav-guestbook">
-              <i class="fas fa-pen-fancy"></i> Guestbook
+            <router-link to="/guestbook" class="nav-link nav-guestbook">
+              <span class="nav-icon"><i class="fas fa-comments"></i></span>
+              <span class="nav-text">Live Chat</span>
+              <span class="live-dot"></span>
             </router-link>
           </li>
         </ul>
+
+        <!-- Right Actions -->
+        <div class="nav-actions">
+          <!-- Theme Toggle -->
+          <button class="theme-toggle" @click="$emit('toggle-theme')" :title="theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'">
+            <i :class="theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon'"></i>
+          </button>
+
+          <!-- Mobile Toggle -->
+          <button class="mobile-toggle" @click="toggleMobileMenu" aria-label="Toggle menu">
+            <span class="hamburger" :class="{ open: isMobileMenuOpen }">
+              <span></span>
+              <span></span>
+              <span></span>
+            </span>
+          </button>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div class="mobile-menu" :class="{ active: isMobileMenuOpen }">
+          <div class="mobile-menu-content">
+            <router-link to="/" @click="closeMobileMenu" class="mobile-link">
+              <i class="fas fa-home"></i> Home
+            </router-link>
+            <a href="/#about" @click="closeMobileMenu" class="mobile-link">
+              <i class="fas fa-user"></i> About
+            </a>
+            <a href="/#music" @click="closeMobileMenu" class="mobile-link">
+              <i class="fas fa-music"></i> Music
+            </a>
+            <a href="/#gallery" @click="closeMobileMenu" class="mobile-link">
+              <i class="fas fa-images"></i> Gallery
+            </a>
+            <router-link to="/guestbook" @click="closeMobileMenu" class="mobile-link">
+              <i class="fas fa-comments"></i> Live Chat
+            </router-link>
+          </div>
+        </div>
       </div>
     </div>
   </nav>
@@ -50,6 +93,13 @@
 <script>
 export default {
   name: 'Navbar',
+  props: {
+    theme: {
+      type: String,
+      default: 'dark'
+    }
+  },
+  emits: ['toggle-theme'],
   data() {
     return {
       isScrolled: false,
@@ -85,16 +135,21 @@ export default {
   left: 0;
   right: 0;
   z-index: 1000;
-  padding: 1rem 0;
+  padding: 16px 0;
   transition: all 0.3s ease;
   background: transparent;
 }
 
 .navbar.scrolled {
-  background: rgba(250, 248, 245, 0.95);
-  backdrop-filter: blur(10px);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  padding: 0.75rem 0;
+  background: rgba(10, 10, 15, 0.9);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border-color);
+  padding: 12px 0;
+}
+
+[data-theme="light"] .navbar.scrolled {
+  background: rgba(250, 250, 250, 0.9);
 }
 
 .navbar-content {
@@ -103,73 +158,152 @@ export default {
   justify-content: space-between;
 }
 
+/* Logo */
 .logo {
   display: flex;
   align-items: center;
-  gap: 0.25rem;
-  font-size: 1.5rem;
+  gap: 12px;
   z-index: 1001;
-  transition: transform 0.3s ease;
 }
 
-.logo:hover {
-  transform: rotate(-3deg);
+.logo-vinyl {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1a1a2e 0%, #0f0f1a 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  animation: spin-slow 8s linear infinite;
+  box-shadow: 0 0 15px var(--accent-glow);
 }
 
-.logo-icon {
-  font-size: 1.8rem;
-  margin-right: 0.25rem;
+.logo-vinyl::before {
+  content: '';
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--gradient-glow);
+}
+
+.vinyl-inner {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--bg-primary);
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 .logo-text {
-  font-size: 1.8rem;
-  color: var(--ink-dark);
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
 }
 
-.logo-accent {
-  color: var(--ink-purple);
-  font-weight: 600;
+.logo-name {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: 2px;
 }
 
+.logo-tagline {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--accent-primary);
+  letter-spacing: 3px;
+}
+
+/* Nav Links */
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 8px;
 }
 
 .nav-link {
-  padding: 10px 18px;
-  border-radius: 25px;
-  font-size: 0.95rem;
-  font-weight: 500;
-  color: var(--ink-medium);
-  transition: all 0.3s ease;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  border: 2px solid transparent;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: var(--radius-full);
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  transition: all 0.25s ease;
+  position: relative;
 }
 
 .nav-link:hover {
-  color: var(--ink-purple);
-  background: var(--paper-white);
-  border-color: var(--washi-purple);
+  color: var(--text-primary);
+  background: var(--bg-card);
 }
 
-.nav-link i {
-  font-size: 0.9rem;
+.nav-icon {
+  font-size: 0.85rem;
+}
+
+.nav-link.router-link-active {
+  color: var(--accent-primary);
+  background: rgba(139, 92, 246, 0.1);
 }
 
 .nav-guestbook {
-  background: var(--ink-purple);
-  color: white !important;
-  border-color: var(--ink-purple);
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
 }
 
 .nav-guestbook:hover {
-  background: transparent;
-  color: var(--ink-purple) !important;
-  transform: translateY(-2px);
+  border-color: var(--accent-primary);
+}
+
+.live-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--accent-green);
+  border-radius: 50%;
+  animation: pulse-live 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse-live {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* Nav Actions */
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.theme-toggle {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 50%;
+  color: var(--text-secondary);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.theme-toggle:hover {
+  color: var(--accent-primary);
+  border-color: var(--accent-primary);
+  transform: rotate(180deg);
 }
 
 /* Mobile Toggle */
@@ -177,106 +311,108 @@ export default {
   display: none;
   width: 40px;
   height: 40px;
-  background: var(--paper-white);
-  border: 2px solid var(--ink-light);
-  border-radius: 10px;
-  cursor: pointer;
-  position: relative;
-  z-index: 1001;
-  transition: all 0.3s ease;
-}
-
-.mobile-toggle:hover {
-  border-color: var(--ink-purple);
-}
-
-.mobile-toggle span,
-.mobile-toggle span::before,
-.mobile-toggle span::after {
-  display: block;
-  width: 20px;
-  height: 2px;
-  background: var(--ink-dark);
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  transition: all 0.3s ease;
-}
-
-.mobile-toggle span {
-  top: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.mobile-toggle span::before {
-  content: '';
-  top: -7px;
-}
-
-.mobile-toggle span::after {
-  content: '';
-  top: 7px;
-}
-
-.mobile-toggle span.open {
+  align-items: center;
+  justify-content: center;
   background: transparent;
+  border: none;
+  cursor: pointer;
+  z-index: 1001;
 }
 
-.mobile-toggle span.open::before {
+.hamburger {
+  width: 24px;
+  height: 18px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.hamburger span {
+  display: block;
+  width: 100%;
+  height: 2px;
+  background: var(--text-primary);
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+.hamburger.open span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.hamburger.open span:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger.open span:nth-child(3) {
+  transform: rotate(-45deg) translate(6px, -6px);
+}
+
+/* Mobile Menu */
+.mobile-menu {
+  position: fixed;
   top: 0;
-  transform: translateX(-50%) rotate(45deg);
-  background: var(--ink-purple);
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--bg-primary);
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
 }
 
-.mobile-toggle span.open::after {
-  top: 0;
-  transform: translateX(-50%) rotate(-45deg);
-  background: var(--ink-purple);
+.mobile-menu.active {
+  opacity: 1;
+  visibility: visible;
 }
 
-/* Mobile Styles */
-@media (max-width: 992px) {
-  .mobile-toggle {
-    display: block;
-  }
+.mobile-menu-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
 
+.mobile-link {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: all 0.3s ease;
+}
+
+.mobile-link:hover,
+.mobile-link.router-link-active {
+  color: var(--accent-primary);
+}
+
+.mobile-link i {
+  width: 30px;
+  text-align: center;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
   .nav-links {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: var(--paper-cream);
-    flex-direction: column;
-    justify-content: center;
-    gap: 1rem;
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.4s ease;
+    display: none;
   }
-
-  .nav-links.active {
-    opacity: 1;
-    visibility: visible;
-  }
-
-  .nav-link {
-    font-size: 1.3rem;
-    padding: 15px 30px;
-  }
-
-  .nav-guestbook {
-    margin-top: 1rem;
+  
+  .mobile-toggle {
+    display: flex;
   }
 }
 
-/* Animation for scrolled state */
-.navbar.scrolled .logo-icon {
-  animation: bounce 0.5s ease;
-}
-
-@keyframes bounce {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-5px); }
+@media (max-width: 480px) {
+  .logo-text {
+    display: none;
+  }
 }
 </style>
