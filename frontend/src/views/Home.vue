@@ -181,37 +181,6 @@
             </div>
           </div>
         </div>
-
-        <div class="music-platforms">
-          <h4>Listen on</h4>
-          <div class="platform-links">
-            <div class="platform-dropdown" v-for="platform in streamingPlatforms" :key="platform.name">
-              <button 
-                class="platform-link" 
-                :class="platform.class"
-                @click.stop="togglePlatformDropdown(platform.name)"
-              >
-                <i :class="platform.icon"></i>
-                <span>{{ platform.name }}</span>
-                <i class="fas fa-chevron-down dropdown-arrow" :class="{ rotated: activePlatformDropdown === platform.name }"></i>
-              </button>
-              
-              <div class="platform-submenu" :class="{ active: activePlatformDropdown === platform.name }" @click.stop>
-                <template v-for="band in bands" :key="band.name">
-                  <a 
-                    v-if="band[platform.key]"
-                    :href="band[platform.key]"
-                    target="_blank"
-                    class="submenu-item"
-                  >
-                    <img :src="band.image" :alt="band.name" class="submenu-img" />
-                    <span>{{ band.name }}</span>
-                  </a>
-                </template>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
     </section>
 
@@ -1167,8 +1136,20 @@ export default {
 
 .skills-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  grid-template-columns: repeat(4, 1fr);
   gap: 24px;
+}
+
+@media (max-width: 1100px) {
+  .skills-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .skills-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .skill-category {
