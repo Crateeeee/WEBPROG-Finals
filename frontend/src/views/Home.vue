@@ -249,12 +249,18 @@
             :key="image.id"
             class="gallery-item"
             :class="image.size"
-            @click="openLightbox(index)"
           >
-            <img :src="image.src" :alt="image.caption" />
+            <img :src="image.src" :alt="image.caption" @click="openLightbox(index)" />
             <div class="gallery-overlay">
               <span class="gallery-caption">{{ image.caption }}</span>
-              <i class="fas fa-expand"></i>
+              <div class="gallery-buttons">
+                <button class="gallery-btn expand-btn" @click="openLightbox(index)" title="View">
+                  <i class="fas fa-expand"></i>
+                </button>
+                <button class="gallery-btn delete-btn" @click.stop="deletePhoto(image.id)" title="Delete">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -528,6 +534,12 @@ export default {
       
       this.newPhoto = { src: '', caption: '', category: 'gigs' }
       this.showUploadModal = false
+    },
+    deletePhoto(id) {
+      if (confirm('Are you sure you want to delete this photo?')) {
+        this.gallery = this.gallery.filter(photo => photo.id !== id)
+        localStorage.setItem('crate-gallery', JSON.stringify(this.gallery))
+      }
     }
   }
 }
@@ -1305,13 +1317,44 @@ export default {
   margin-bottom: 8px;
 }
 
-.gallery-overlay i {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 2rem;
+.gallery-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.gallery-btn {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 1rem;
+}
+
+.expand-btn {
+  background: var(--accent-primary);
   color: white;
+}
+
+.expand-btn:hover {
+  background: var(--accent-secondary);
+  transform: scale(1.1);
+}
+
+.delete-btn {
+  background: var(--accent-red);
+  color: white;
+}
+
+.delete-btn:hover {
+  background: #dc2626;
+  transform: scale(1.1);
 }
 
 .gallery-actions {
