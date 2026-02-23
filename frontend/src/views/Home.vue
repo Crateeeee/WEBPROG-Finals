@@ -91,16 +91,24 @@
 
           <div class="about-text">
             <p class="about-intro">
-              A passionate musician and developer based in the Philippines. I've been playing 
-              in bands since high school, exploring different genres from rock to indie to electronic.
+              A Web Programming student at Asia Pacific College with a passion for music. 
+              I build interactive web experiences and solve problems with code, 
+              while exploring different genres from rock to indie to electronic with my bands.
             </p>
 
             <div class="about-details">
               <div class="detail-card">
-                <i class="fas fa-music"></i>
+                <i class="fas fa-graduation-cap"></i>
                 <div>
-                  <h4>Music Producer</h4>
-                  <p>Creating and producing tracks across multiple genres</p>
+                  <h4>Education</h4>
+                  <p>Asia Pacific College (2023 - Present)</p>
+                </div>
+              </div>
+              <div class="detail-card">
+                <i class="fas fa-laptop-code"></i>
+                <div>
+                  <h4>Course</h4>
+                  <p>Bachelor of Science in Information Technology (BSIT)</p>
                 </div>
               </div>
               <div class="detail-card">
@@ -113,8 +121,8 @@
               <div class="detail-card">
                 <i class="fas fa-guitar"></i>
                 <div>
-                  <h4>Multi-Instrumentalist</h4>
-                  <p>Guitar, bass, drums, and keyboard enthusiast</p>
+                  <h4>Lead Guitarist</h4>
+                  <p>Playing with Cm/S, Fablewake, and solo projects</p>
                 </div>
               </div>
             </div>
