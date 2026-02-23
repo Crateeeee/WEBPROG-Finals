@@ -4,24 +4,25 @@
       <div class="footer-content">
         <div class="footer-brand">
           <div class="logo">
-            <span class="logo-text">Crate</span>
-            <span class="logo-accent">.dev</span>
+            <span class="logo-icon">📓</span>
+            <span class="logo-text text-handwritten">Crate</span>
+            <span class="logo-accent">.journal</span>
           </div>
-          <p>Building digital experiences with passion and code.</p>
+          <p class="brand-tagline">Documenting my journey through code & creativity ✨</p>
         </div>
 
         <div class="footer-links">
-          <h4>Quick Links</h4>
+          <h4 class="text-handwritten">Quick Links</h4>
           <ul>
-            <li><router-link to="/">Home</router-link></li>
-            <li><a href="/#about">About</a></li>
-            <li><a href="/#skills">Skills</a></li>
-            <li><router-link to="/guestbook">Guestbook</router-link></li>
+            <li><router-link to="/"><i class="fas fa-home"></i> Home</router-link></li>
+            <li><a href="/#about"><i class="fas fa-user"></i> About</a></li>
+            <li><a href="/#skills"><i class="fas fa-code"></i> Skills</a></li>
+            <li><router-link to="/guestbook"><i class="fas fa-pen-fancy"></i> Guestbook</router-link></li>
           </ul>
         </div>
 
         <div class="footer-social">
-          <h4>Connect</h4>
+          <h4 class="text-handwritten">Let's Connect!</h4>
           <div class="social-links">
             <a href="https://www.facebook.com/CrateeMarshall" target="_blank" rel="noopener" aria-label="Facebook">
               <i class="fab fa-facebook-f"></i>
@@ -40,8 +41,14 @@
       </div>
 
       <div class="footer-bottom">
-        <p>&copy; {{ currentYear }} Crate Marshall Pinlac. All rights reserved.</p>
-        <p>Made with <i class="fas fa-heart heart-icon"></i> using Vue.js</p>
+        <p>© {{ currentYear }} Crate Marshall Pinlac • All rights reserved</p>
+        <p class="made-with">Made with <span class="heart-icon">❤️</span> using Vue.js + NestJS</p>
+      </div>
+      
+      <div class="footer-doodles">
+        <span>✨</span>
+        <span>📝</span>
+        <span>🌟</span>
       </div>
     </div>
   </footer>
@@ -60,10 +67,11 @@ export default {
 
 <style scoped>
 .footer {
-  background: var(--dark-surface);
-  padding: 60px 0 30px;
+  background: linear-gradient(to bottom, transparent, rgba(255, 234, 167, 0.2));
+  padding: 80px 0 40px;
   margin-top: auto;
-  border-top: 1px solid var(--dark-border);
+  border-top: 3px dashed var(--ink-light);
+  position: relative;
 }
 
 .footer-content {
@@ -77,38 +85,37 @@ export default {
   font-size: 1.5rem;
   font-weight: 700;
   margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.logo-icon {
+  font-size: 1.8rem;
 }
 
 .logo-text {
-  color: var(--text-primary);
+  font-size: 1.8rem;
+  color: var(--ink-dark);
 }
 
 .logo-accent {
-  color: var(--primary-color);
+  color: var(--ink-purple);
+  font-weight: 600;
 }
 
-.footer-brand p {
-  color: var(--text-secondary);
+.brand-tagline {
+  color: var(--ink-medium);
   max-width: 300px;
+  font-size: 1rem;
 }
 
 .footer-links h4,
 .footer-social h4 {
-  color: var(--text-primary);
-  font-size: 1.1rem;
+  font-size: 1.5rem;
+  color: var(--ink-dark);
   margin-bottom: 1.5rem;
   position: relative;
-}
-
-.footer-links h4::after,
-.footer-social h4::after {
-  content: '';
-  position: absolute;
-  bottom: -8px;
-  left: 0;
-  width: 40px;
-  height: 2px;
-  background: var(--primary-color);
 }
 
 .footer-links ul {
@@ -118,13 +125,21 @@ export default {
 }
 
 .footer-links a {
-  color: var(--text-secondary);
-  transition: var(--transition);
+  color: var(--ink-medium);
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.footer-links a i {
+  font-size: 0.9rem;
+  color: var(--ink-purple);
 }
 
 .footer-links a:hover {
-  color: var(--primary-color);
-  padding-left: 5px;
+  color: var(--ink-purple);
+  transform: translateX(5px);
 }
 
 .social-links {
@@ -133,23 +148,24 @@ export default {
 }
 
 .social-links a {
-  width: 40px;
-  height: 40px;
-  background: var(--dark-card);
-  border-radius: 50%;
+  width: 45px;
+  height: 45px;
+  background: var(--paper-white);
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--text-secondary);
-  transition: var(--transition);
-  border: 1px solid var(--dark-border);
+  color: var(--ink-medium);
+  transition: all 0.3s ease;
+  border: 2px dashed var(--ink-light);
 }
 
 .social-links a:hover {
-  background: var(--primary-color);
+  background: var(--ink-purple);
   color: white;
-  transform: translateY(-3px);
-  border-color: var(--primary-color);
+  transform: translateY(-3px) rotate(-5deg);
+  border-color: var(--ink-purple);
+  border-style: solid;
 }
 
 .footer-bottom {
@@ -157,19 +173,46 @@ export default {
   justify-content: space-between;
   align-items: center;
   padding-top: 2rem;
-  border-top: 1px solid var(--dark-border);
-  color: var(--text-secondary);
+  border-top: 2px dashed var(--ink-light);
+  color: var(--ink-medium);
   font-size: 0.9rem;
 }
 
 .heart-icon {
-  color: #e74c3c;
+  display: inline-block;
   animation: pulse 1s ease infinite;
+}
+
+.footer-doodles {
+  position: absolute;
+  bottom: 100px;
+  right: 30px;
+  display: flex;
+  gap: 10px;
+  font-size: 1.5rem;
+  opacity: 0.5;
+}
+
+.footer-doodles span {
+  animation: float 3s ease-in-out infinite;
+}
+
+.footer-doodles span:nth-child(2) {
+  animation-delay: 0.5s;
+}
+
+.footer-doodles span:nth-child(3) {
+  animation-delay: 1s;
 }
 
 @keyframes pulse {
   0%, 100% { transform: scale(1); }
   50% { transform: scale(1.2); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
 }
 
 /* Responsive */
@@ -180,18 +223,20 @@ export default {
     gap: 2rem;
   }
 
-  .footer-brand p {
-    max-width: 100%;
+  .footer-brand .logo {
+    justify-content: center;
   }
 
-  .footer-links h4::after,
-  .footer-social h4::after {
-    left: 50%;
-    transform: translateX(-50%);
+  .brand-tagline {
+    max-width: 100%;
   }
 
   .footer-links ul {
     align-items: center;
+  }
+
+  .footer-links a {
+    justify-content: center;
   }
 
   .social-links {
@@ -202,6 +247,10 @@ export default {
     flex-direction: column;
     gap: 0.5rem;
     text-align: center;
+  }
+
+  .footer-doodles {
+    display: none;
   }
 }
 </style>
