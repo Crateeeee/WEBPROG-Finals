@@ -22,22 +22,22 @@
             </router-link>
           </li>
           <li>
-            <a href="/#about" class="nav-link">
+            <router-link :to="{ path: '/', hash: '#about' }" class="nav-link">
               <span class="nav-icon"><i class="fas fa-user"></i></span>
               <span class="nav-text">About</span>
-            </a>
+            </router-link>
           </li>
           <li>
-            <a href="/#music" class="nav-link">
+            <router-link :to="{ path: '/', hash: '#music' }" class="nav-link">
               <span class="nav-icon"><i class="fas fa-music"></i></span>
               <span class="nav-text">Music</span>
-            </a>
+            </router-link>
           </li>
           <li>
-            <a href="/#gallery" class="nav-link">
+            <router-link :to="{ path: '/', hash: '#gallery' }" class="nav-link">
               <span class="nav-icon"><i class="fas fa-images"></i></span>
               <span class="nav-text">Gallery</span>
-            </a>
+            </router-link>
           </li>
           <li>
             <router-link to="/guestbook" class="nav-link nav-guestbook">
@@ -71,15 +71,15 @@
             <router-link to="/" @click="closeMobileMenu" class="mobile-link">
               <i class="fas fa-home"></i> Home
             </router-link>
-            <a href="/#about" @click="closeMobileMenu" class="mobile-link">
+            <router-link :to="{ path: '/', hash: '#about' }" @click="closeMobileMenu" class="mobile-link">
               <i class="fas fa-user"></i> About
-            </a>
-            <a href="/#music" @click="closeMobileMenu" class="mobile-link">
+            </router-link>
+            <router-link :to="{ path: '/', hash: '#music' }" @click="closeMobileMenu" class="mobile-link">
               <i class="fas fa-music"></i> Music
-            </a>
-            <a href="/#gallery" @click="closeMobileMenu" class="mobile-link">
+            </router-link>
+            <router-link :to="{ path: '/', hash: '#gallery' }" @click="closeMobileMenu" class="mobile-link">
               <i class="fas fa-images"></i> Gallery
-            </a>
+            </router-link>
             <router-link to="/guestbook" @click="closeMobileMenu" class="mobile-link">
               <i class="fas fa-comments"></i> Live Chat
             </router-link>

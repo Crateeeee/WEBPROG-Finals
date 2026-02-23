@@ -1,16 +1,19 @@
 <template>
   <div class="music-player" :class="{ minimized: isMinimized }">
     <!-- Minimized View -->
-    <div v-if="isMinimized" class="player-mini" @click="toggleMinimize">
-      <div class="mini-album" :class="{ playing: isPlaying }">
+    <div v-if="isMinimized" class="player-mini">
+      <div class="mini-album" :class="{ playing: isPlaying }" @click="toggleMinimize">
         <img :src="currentTrack.cover" :alt="currentTrack.title" />
       </div>
       <div class="mini-equalizer" v-if="isPlaying">
         <span></span><span></span><span></span>
       </div>
-      <div class="mini-play-btn" @click.stop="togglePlay">
+      <button class="mini-play-btn-separate" @click="togglePlay" title="Play/Pause">
         <i :class="isPlaying ? 'fas fa-pause' : 'fas fa-play'"></i>
-      </div>
+      </button>
+      <button class="mini-expand-btn" @click="toggleMinimize" title="Expand">
+        <i class="fas fa-expand"></i>
+      </button>
     </div>
 
     <!-- Full Player -->
@@ -406,22 +409,53 @@ export default {
   object-fit: cover;
 }
 
-.mini-play-btn {
+.mini-play-btn-separate {
   position: absolute;
-  inset: 0;
+  bottom: -5px;
+  left: -5px;
+  width: 28px;
+  height: 28px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0, 0, 0, 0.5);
+  background: var(--accent-primary);
+  border: 2px solid var(--bg-card);
   border-radius: 50%;
-  opacity: 0;
-  transition: opacity 0.2s ease;
   color: white;
-  font-size: 1rem;
+  font-size: 0.7rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 2;
 }
 
-.player-mini:hover .mini-play-btn {
-  opacity: 1;
+.mini-play-btn-separate:hover {
+  transform: scale(1.1);
+  background: var(--accent-secondary);
+}
+
+.mini-expand-btn {
+  position: absolute;
+  bottom: -5px;
+  right: -5px;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-elevated);
+  border: 2px solid var(--bg-card);
+  border-radius: 50%;
+  color: var(--text-secondary);
+  font-size: 0.65rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 2;
+}
+
+.mini-expand-btn:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+  transform: scale(1.1);
 }
 
 .mini-equalizer {

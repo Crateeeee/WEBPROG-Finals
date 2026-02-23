@@ -138,7 +138,7 @@
         </div>
 
         <div class="bands-grid">
-          <div v-for="(band, index) in bands" :key="band.name" class="band-card" @click="toggleBandDropdown(index)">
+          <div v-for="(band, index) in bands" :key="band.name" class="band-card" @click.stop="toggleBandDropdown(index)">
             <div class="band-image">
               <img :src="band.image" :alt="band.name" />
               <div class="band-overlay">
@@ -189,14 +189,14 @@
               <button 
                 class="platform-link" 
                 :class="platform.class"
-                @click="togglePlatformDropdown(platform.name)"
+                @click.stop="togglePlatformDropdown(platform.name)"
               >
                 <i :class="platform.icon"></i>
                 <span>{{ platform.name }}</span>
                 <i class="fas fa-chevron-down dropdown-arrow" :class="{ rotated: activePlatformDropdown === platform.name }"></i>
               </button>
               
-              <div class="platform-submenu" :class="{ active: activePlatformDropdown === platform.name }">
+              <div class="platform-submenu" :class="{ active: activePlatformDropdown === platform.name }" @click.stop>
                 <template v-for="band in bands" :key="band.name">
                   <a 
                     v-if="band[platform.key]"
