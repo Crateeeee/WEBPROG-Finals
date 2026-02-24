@@ -37,7 +37,7 @@
 
             <div class="hero-stats">
               <div class="stat">
-                <span class="stat-value">3+</span>
+                <span class="stat-value">13+</span>
                 <span class="stat-label">Bands</span>
               </div>
               <div class="stat-divider"></div>
@@ -141,23 +141,30 @@
       <div class="container">
         <div class="section-header">
           <span class="section-label">// My Music</span>
-          <h2 class="section-title">Bands & <span class="text-gradient">Projects</span></h2>
-          <p class="section-subtitle">Check out the bands I've been part of and my musical journey</p>
+          <h2 class="section-title">Current <span class="text-gradient">Projects</span></h2>
+          <p class="section-subtitle">The bands I'm currently active with</p>
         </div>
 
         <div class="bands-grid">
-          <div v-for="(band, index) in bands" :key="band.name" class="band-card" :class="{ 'dropdown-active': activeBandDropdown === index }" @click.stop="toggleBandDropdown(index)">
+          <div v-for="(band, index) in currentBands" :key="band.name" class="band-card" :class="{ 'dropdown-active': activeBandDropdown === index }" @click.stop="toggleBandDropdown(index)">
             <div class="band-image">
               <img :src="band.image" :alt="band.name" />
               <div class="band-overlay">
-                <i class="fas fa-headphones"></i>
-                <span>Listen</span>
+                <!-- Play video button if band has YouTube video -->
+                <button v-if="band.youtubeId" class="play-video-btn" @click.stop="playBandVideo(band)" title="Watch Video">
+                  <i class="fas fa-play"></i>
+                </button>
+                <template v-else>
+                  <i class="fas fa-headphones"></i>
+                  <span>Listen</span>
+                </template>
               </div>
             </div>
             <div class="band-info">
               <h3 class="band-name">{{ band.name }}</h3>
               <span class="band-role">{{ band.role }}</span>
               <p class="band-genre">{{ band.genre }}</p>
+              <p v-if="band.description" class="band-description">{{ band.description }}</p>
             </div>
             
             <!-- Streaming Dropdown -->
@@ -200,6 +207,90 @@
                 </a>
               </div>
               <!-- Videos Section -->
+              <div v-if="band.videos && band.videos.length > 0" class="dropdown-videos">
+                <div class="videos-header">
+                  <i class="fas fa-video"></i> Videos
+                </div>
+                <a 
+                  v-for="(video, vidIndex) in band.videos" 
+                  :key="vidIndex" 
+                  :href="video.url" 
+                  target="_blank" 
+                  class="dropdown-link video"
+                >
+                  <i class="fas fa-play-circle"></i>
+                  <span>{{ video.title }}</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Previous Projects Subsection -->
+        <div class="section-header previous-projects-header">
+          <h3 class="subsection-title">Previous <span class="text-gradient">Projects</span></h3>
+          <p class="section-subtitle">Bands and collaborations from my musical journey</p>
+        </div>
+
+        <div class="bands-grid previous-bands">
+          <div v-for="(band, index) in previousBands" :key="band.name" class="band-card" :class="{ 'dropdown-active': activeBandDropdown === (index + 3) }" @click.stop="toggleBandDropdown(index + 3)">
+            <div class="band-image">
+              <img :src="band.image" :alt="band.name" />
+              <div class="band-overlay">
+                <button v-if="band.youtubeId" class="play-video-btn" @click.stop="playBandVideo(band)" title="Watch Video">
+                  <i class="fas fa-play"></i>
+                </button>
+                <template v-else>
+                  <i class="fas fa-headphones"></i>
+                  <span>Listen</span>
+                </template>
+              </div>
+            </div>
+            <div class="band-info">
+              <h3 class="band-name">{{ band.name }}</h3>
+              <span class="band-role">{{ band.role }}</span>
+              <p class="band-genre">{{ band.genre }}</p>
+              <p v-if="band.description" class="band-description">{{ band.description }}</p>
+            </div>
+            
+            <!-- Streaming Dropdown -->
+            <div class="band-dropdown" :class="{ active: activeBandDropdown === (index + 3) }" @click.stop>
+              <div class="dropdown-header">
+                <span>Stream {{ band.name }}</span>
+                <button class="dropdown-close" @click.stop="activeBandDropdown = null">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+              <div class="dropdown-links">
+                <a v-if="band.spotify" :href="band.spotify" target="_blank" class="dropdown-link spotify">
+                  <i class="fab fa-spotify"></i>
+                  <span>Spotify</span>
+                </a>
+                <a v-if="band.appleMusic" :href="band.appleMusic" target="_blank" class="dropdown-link apple">
+                  <i class="fab fa-apple"></i>
+                  <span>Apple Music</span>
+                </a>
+                <a v-if="band.youtube" :href="band.youtube" target="_blank" class="dropdown-link youtube">
+                  <i class="fab fa-youtube"></i>
+                  <span>YouTube</span>
+                </a>
+                <a v-if="band.youtubeMusic" :href="band.youtubeMusic" target="_blank" class="dropdown-link youtube-music">
+                  <i class="fas fa-music"></i>
+                  <span>YouTube Music</span>
+                </a>
+                <a v-if="band.facebook" :href="band.facebook" target="_blank" class="dropdown-link facebook">
+                  <i class="fab fa-facebook"></i>
+                  <span>Facebook</span>
+                </a>
+                <a v-if="band.instagram" :href="band.instagram" target="_blank" class="dropdown-link instagram">
+                  <i class="fab fa-instagram"></i>
+                  <span>Instagram</span>
+                </a>
+                <a v-if="band.tiktok" :href="band.tiktok" target="_blank" class="dropdown-link tiktok">
+                  <i class="fab fa-tiktok"></i>
+                  <span>TikTok</span>
+                </a>
+              </div>
               <div v-if="band.videos && band.videos.length > 0" class="dropdown-videos">
                 <div class="videos-header">
                   <i class="fas fa-video"></i> Videos
@@ -359,6 +450,30 @@
         </div>
       </div>
     </div>
+
+    <!-- Band Video Modal (YouTube Embed) -->
+    <Transition name="video-fade">
+      <div v-if="showVideoModal" class="video-modal-overlay" @click.self="closeVideo">
+        <div class="video-modal">
+          <button class="video-close" @click="closeVideo">
+            <i class="fas fa-times"></i>
+          </button>
+          <div class="video-container youtube-container">
+            <iframe
+              :src="youtubeEmbedUrl"
+              :class="{ 'video-visible': videoVisible }"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen
+            ></iframe>
+            <div v-if="currentVideoBand" class="video-info">
+              <h3>{{ currentVideoBand.name }}</h3>
+              <p>{{ currentVideoBand.role }} • {{ currentVideoBand.genre }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Transition>
   </main>
 </template>
 
@@ -377,6 +492,11 @@ export default {
       showUploadModal: false,
       activeBandDropdown: null,
       activePlatformDropdown: null,
+      // Video player state (YouTube)
+      showVideoModal: false,
+      currentYoutubeId: '',
+      currentVideoBand: null,
+      videoVisible: false,
       newPhoto: {
         src: '',
         caption: '',
@@ -409,6 +529,7 @@ export default {
        *   role: 'Lead Guitarist',         // Your role in the band
        *   genre: 'Pop Punk',              // Music genre
        *   image: '/images/band.jpg',      // Put image in /frontend/public/images/
+       *   youtubeId: 'dQw4w9WgXcQ',       // YouTube video ID (works with unlisted videos)
        *   
        *   // STREAMING LINKS (leave '' if not available):
        *   spotify: 'https://...',
@@ -421,12 +542,18 @@ export default {
        *   instagram: 'https://...',
        *   tiktok: 'https://...',
        *   
-       *   // VIDEOS - Add YouTube video IDs or full URLs:
+       *   // VIDEOS - External video links:
        *   videos: [
        *     { title: 'Music Video', url: 'https://youtube.com/watch?v=...' },
        *     { title: 'Live Performance', url: 'https://youtube.com/watch?v=...' }
        *   ]
        * }
+       * 
+       * VIDEO FILE SETUP:
+       * 1. Create folder: /frontend/public/videos/
+       * 2. Put your .mp4 videos there
+       * 3. Use path like: '/videos/apc-band.mp4'
+       * 4. Keep videos short (10-30 seconds) for best experience
        * =====================================================
        */
       bands: [
@@ -435,13 +562,14 @@ export default {
           role: 'Lead Guitarist',
           genre: 'Pop Punk',
           image: '/images/cms.jpg',
+          youtubeId: 'mYEg_StsH9k',      // TODO: Add YouTube video ID (e.g., 'dQw4w9WgXcQ')
           spotify: '',
           appleMusic: '',
           youtube: 'https://www.youtube.com/@CentimetersperSecond',
           youtubeMusic: '',
-          facebook: '',        // Add Facebook link (e.g., 'https://facebook.com/bandname')
-          instagram: '',       // Add Instagram link (e.g., 'https://instagram.com/bandname')
-          tiktok: '',          // Add TikTok link (e.g., 'https://tiktok.com/@bandname')
+          facebook: 'https://www.facebook.com/profile.php?id=61573229195720',        // Add Facebook link (e.g., 'https://facebook.com/bandname')
+          instagram: 'https://www.instagram.com/centimeters_per_second',       // Add Instagram link (e.g., 'https://instagram.com/bandname')
+          tiktok: 'https://www.tiktok.com/@centimeters.per.second',          // Add TikTok link (e.g., 'https://tiktok.com/@bandname')
           videos: []           // Add video objects: { title: 'Video Title', url: 'https://...' }
         },
         {
@@ -449,28 +577,187 @@ export default {
           role: 'Lead Guitarist',
           genre: 'Progressive Rock',
           image: '/images/fablewake.jpg',
+          youtubeId: 'n0WLBPPVObM&t=759s',      // TODO: Add YouTube video ID (e.g., 'dQw4w9WgXcQ')
           spotify: 'https://open.spotify.com/artist/5pg6uAPBAN2wy2SxCi5fLn',
           appleMusic: 'https://music.apple.com/us/artist/fablewake/1757894350',
           youtube: 'https://www.youtube.com/@fablewakeofficial',
           youtubeMusic: 'https://music.youtube.com/channel/UCAhrwviTv21ZT5y-NcXAPYg',
-          facebook: '',        // Add Facebook link
-          instagram: '',       // Add Instagram link
-          tiktok: '',          // Add TikTok link
+          facebook: 'https://www.facebook.com/fablewakeph',        // Add Facebook link
+          instagram: 'https://www.instagram.com/fablewake/',       // Add Instagram link
+          tiktok: 'https://www.tiktok.com/@fablewake',          // Add TikTok link
           videos: []           // Add videos here
         },
         {
           name: 'Solo Project',
           role: 'Guitar',
-          genre: 'Any',
+          genre: 'Instrumental/Experimental',
           image: '/images/solo.JPG',
+          youtubeId: 'dftDWPaeixM',      // TODO: Add YouTube video ID (e.g., 'dQw4w9WgXcQ')
           spotify: '',
           appleMusic: '',
           youtube: 'https://www.youtube.com/@cratemarshall',
           youtubeMusic: '',
-          facebook: '',        // Add Facebook link
-          instagram: '',       // Add Instagram link
-          tiktok: '',          // Add TikTok link
+          facebook: 'https://www.facebook.com/CrateeMarshall/',        // Add Facebook link
+          instagram: 'https://www.instagram.com/crate_marshall/',       // Add Instagram link
+          tiktok: 'https://www.tiktok.com/@cratemarshall',          // Add TikTok link
           videos: []           // Add videos here
+        },
+        // ========== NEW BANDS (Latest to Old) ==========
+        {
+          name: 'APC Band',
+          role: 'Guitarist',
+          genre: 'Open Genre',
+          description: 'APC Organization',
+          image: '/images/apc-band.jpg',      // TODO: Add your image
+          youtubeId: 'M0xCeyfdREc',      // TODO: Add YouTube video ID (e.g., 'dQw4w9WgXcQ')
+          spotify: '',
+          appleMusic: '',
+          youtube: '',
+          youtubeMusic: '',
+          facebook: 'https://www.facebook.com/theapcband',
+          instagram: 'https://www.instagram.com/theapcband/',
+          tiktok: 'https://www.tiktok.com/@apcband.official',
+          videos: []
+        },
+        {
+          name: '.xyze',
+          role: 'Guitarist',
+          genre: 'Instrumental',
+          description: 'Sessionist',
+          image: '/images/xyze.jpg',          // TODO: Add your image
+          youtubeId: '99Rk02lMiCI&t=13s',      // TODO: Add YouTube video ID (e.g., 'dQw4w9WgXcQ')
+          spotify: 'https://open.spotify.com/artist/2ICGPlKHeUjio0qw8dMTH7',
+          appleMusic: 'https://music.apple.com/us/artist/xyze/1773394953',
+          youtube: 'https://www.youtube.com/channel/UCWG0McoSm5-kzISwaa_YdJA',
+          youtubeMusic: 'https://music.youtube.com/channel/UCyThL3WV6bLEUXzccKR4FLA',
+          facebook: 'https://www.facebook.com/xyzeband/',
+          instagram: 'https://www.instagram.com/xyzeband',
+          tiktok: 'https://www.tiktok.com/@xyzeband',
+          videos: []
+        },
+        {
+          name: 'Morrissey Yu',
+          role: 'Lead Guitarist',
+          genre: 'Progressive Rock & Instrumental',
+          description: 'Thesis Project - Heavenly Ones and Space Mammal',
+          image: '/images/morrissey-yu.jpg',  // TODO: Add your image
+          youtubeId: 'Ac3R-_vY3bc&t=',      // TODO: Add YouTube video ID (e.g., 'dQw4w9WgXcQ')
+          spotify: 'https://open.spotify.com/artist/4mj8OnWW3nTw2LoYRjnOSV',
+          appleMusic: 'https://music.apple.com/us/artist/morrissey-yu/1820966291',
+          youtube: 'https://www.youtube.com/channel/UCsUq2K7FpxUVaR5XzC2qfAg',
+          youtubeMusic: 'https://music.youtube.com/channel/UCM7i1Uk2wSbRv367iug0lcw',
+          facebook: 'https://www.facebook.com/morrrrrris',
+          instagram: 'https://www.instagram.com/camarada_yu',
+          tiktok: '',
+          videos: []
+        },
+        {
+          name: 'Arlaux',
+          role: 'Lead Guitarist',
+          genre: 'Instrumental',
+          description: 'Solo Project - Fell in the Pool',
+          image: '/images/arlaux.jpg',        // TODO: Add your image
+          youtubeId: 'MARVMyOc1Q0&t=478s',      // TODO: Add YouTube video ID (e.g., 'dQw4w9WgXcQ')
+          spotify: 'https://open.spotify.com/artist/1Qw81opkAUZsl7iuuLBwKr',
+          appleMusic: 'https://music.apple.com/us/artist/arlaux/1719632483',
+          youtube: 'https://www.youtube.com/@arlauxwav',
+          youtubeMusic: 'https://music.youtube.com/channel/UCp3K_3-d0ZI54DRfXgdb2Jw',
+          facebook: 'https://www.facebook.com/iamarlaux',
+          instagram: 'https://www.instagram.com/arlaux.wav',
+          tiktok: 'https://www.tiktok.com/@arlaux.wav',
+          videos: []
+        },
+        {
+          name: 'Redive',
+          role: 'Lead Guitarist',
+          genre: 'J-Rock',
+          image: '/images/redive.jpg',        // TODO: Add your image
+          youtubeId: '6c4sckW92hE',      // TODO: Add YouTube video ID (e.g., 'dQw4w9WgXcQ')
+          spotify: '',
+          appleMusic: '',
+          youtube: '',
+          youtubeMusic: '',
+          facebook: 'https://www.facebook.com/profile.php?id=61570177957723',
+          instagram: 'https://www.instagram.com/rediveofficial/',
+          tiktok: '',
+          videos: []
+        },
+        {
+          name: 'Moonstruck 24',
+          role: 'Guitarist',
+          genre: 'OPM & Pop',
+          image: '/images/moonstruck24.jpg',  // TODO: Add your image
+          youtubeId: 'MH15loi_YYs',      // TODO: Add YouTube video ID (e.g., 'dQw4w9WgXcQ')
+          spotify: '',
+          appleMusic: '',
+          youtube: '',
+          youtubeMusic: '',
+          facebook: '',
+          instagram: '',
+          tiktok: '',
+          videos: []
+        },
+        {
+          name: 'EarKisses',
+          role: 'Guitarist',
+          genre: 'OPM & Pop',
+          image: '/images/earkisses.jpg',     // TODO: Add your image
+          youtubeId: 'FhUgsf3aiKY',      // TODO: Add YouTube video ID (e.g., 'dQw4w9WgXcQ')
+          spotify: '',
+          appleMusic: '',
+          youtube: '',
+          youtubeMusic: '',
+          facebook: 'https://www.facebook.com/earkisses.band',
+          instagram: '',
+          tiktok: '',
+          videos: []
+        },
+        {
+          name: 'Joaquin Pacete Band',
+          role: 'Guitarist',
+          genre: 'OPM Pop Ballad',
+          image: '/images/joaquin-pacete.jpg', // TODO: Add your image
+          youtubeId: 's9PjJ_ZM97A',      // TODO: Add YouTube video ID (e.g., 'dQw4w9WgXcQ')
+          spotify: 'https://open.spotify.com/artist/5zrbkFNz6p6abNBWWiWPrT',
+          appleMusic: 'https://music.apple.com/us/artist/joaquin-pacete/1498410933',
+          youtube: 'https://www.youtube.com/@joaquinpacete',
+          youtubeMusic: 'https://music.youtube.com/channel/UC88Tx7F3QdXycyQFjVdOlcQ',
+          facebook: 'https://www.facebook.com/joaquinpacete',
+          instagram: 'https://www.instagram.com/joaquinpacete/',
+          tiktok: 'https://www.tiktok.com/@joaquinpacete',
+          videos: []
+        },
+        {
+          name: 'Himig ng Pagtindig',
+          role: 'Guitarist',
+          genre: 'OPM',
+          description: 'School Project - Champion',
+          image: '/images/himig.jpg',         // TODO: Add your image
+          youtubeId: 'yD1CgZT1efQ',      // TODO: Add YouTube video ID (e.g., 'dQw4w9WgXcQ')
+          spotify: '',
+          appleMusic: '',
+          youtube: '',
+          youtubeMusic: '',
+          facebook: 'https://www.facebook.com/APCSeniorHighSchool/videos/771313244754841/',
+          instagram: '',
+          tiktok: '',
+          videos: []
+        },
+        {
+          name: 'Room 205 Band',
+          role: 'Guitarist',
+          genre: 'OPM',
+          description: 'Experimental band',
+          image: '/images/room205.jpg',       // TODO: Add your image
+          youtubeId: 'M6n8M9GM6nQ',      // TODO: Add YouTube video ID (e.g., 'dQw4w9WgXcQ')
+          spotify: '',
+          appleMusic: '',
+          youtube: '',
+          youtubeMusic: '',
+          facebook: '',
+          instagram: '',
+          tiktok: '',
+          videos: []
         }
       ],
       skillCategories: [
@@ -530,6 +817,18 @@ export default {
     filteredGallery() {
       if (this.activeTab === 'all') return this.gallery
       return this.gallery.filter(img => img.category === this.activeTab)
+    },
+    youtubeEmbedUrl() {
+      if (!this.currentYoutubeId) return ''
+      // Supports unlisted and public videos with autoplay
+      return `https://www.youtube.com/embed/${this.currentYoutubeId}?autoplay=1&rel=0&modestbranding=1`
+    },
+    // Split bands into current (first 3) and previous projects
+    currentBands() {
+      return this.bands.slice(0, 3)
+    },
+    previousBands() {
+      return this.bands.slice(3)
     }
   },
   mounted() {
@@ -600,6 +899,33 @@ export default {
         this.gallery = this.gallery.filter(photo => photo.id !== id)
         localStorage.setItem('crate-gallery', JSON.stringify(this.gallery))
       }
+    },
+    
+    // YouTube video player methods
+    playBandVideo(band) {
+      if (!band.youtubeId) return
+      
+      this.currentYoutubeId = band.youtubeId
+      this.currentVideoBand = band
+      this.showVideoModal = true
+      this.videoVisible = false
+      
+      // Fade in after modal renders
+      this.$nextTick(() => {
+        setTimeout(() => {
+          this.videoVisible = true
+        }, 100)
+      })
+    },
+    
+    closeVideo() {
+      this.videoVisible = false
+      // Wait for fade out animation
+      setTimeout(() => {
+        this.showVideoModal = false
+        this.currentYoutubeId = ''
+        this.currentVideoBand = null
+      }, 300)
     }
   }
 }
@@ -725,9 +1051,14 @@ export default {
   transition: box-shadow 0.3s ease;
 }
 
-/* Spinning animation - only when playing */
-.vinyl-record.spinning {
+/* Spinning animation - always applied, paused when not playing */
+.vinyl-record {
   animation: spin-slow 3s linear infinite;
+  animation-play-state: paused;
+}
+
+.vinyl-record.spinning {
+  animation-play-state: running;
   box-shadow: 
     0 0 0 10px rgba(139, 92, 246, 0.2),
     0 0 80px rgba(139, 92, 246, 0.5),
@@ -943,6 +1274,29 @@ export default {
   margin-bottom: 48px;
 }
 
+/* Previous Projects Section */
+.previous-projects-header {
+  margin-top: 60px;
+  margin-bottom: 32px;
+  padding-top: 40px;
+  border-top: 1px solid var(--border-color);
+}
+
+.subsection-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.previous-bands .band-card {
+  opacity: 0.9;
+}
+
+.previous-bands .band-card:hover {
+  opacity: 1;
+}
+
 .band-card {
   background: var(--bg-card);
   border: 1px solid var(--border-color);
@@ -1007,6 +1361,136 @@ export default {
   font-size: 0.9rem;
   color: white;
   font-weight: 500;
+}
+
+/* Play Video Button */
+.play-video-btn {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: var(--accent-primary);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(139, 92, 246, 0.5);
+}
+
+.play-video-btn i {
+  font-size: 1.8rem;
+  color: white;
+  margin-left: 4px; /* Optical centering for play icon */
+}
+
+.play-video-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 30px rgba(139, 92, 246, 0.7);
+}
+
+/* Video Modal */
+.video-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 20px;
+}
+
+.video-modal {
+  position: relative;
+  width: 100%;
+  max-width: 1200px;
+  max-height: 90vh;
+}
+
+.video-close {
+  position: absolute;
+  top: -50px;
+  right: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 10;
+}
+
+.video-close:hover {
+  background: var(--accent-primary);
+  border-color: var(--accent-primary);
+  color: white;
+}
+
+.video-container {
+  position: relative;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: #000;
+}
+
+/* YouTube iframe responsive container */
+.video-container.youtube-container {
+  aspect-ratio: 16 / 9;
+  width: 100%;
+}
+
+.video-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.video-container iframe.video-visible {
+  opacity: 1;
+}
+
+.video-info {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 20px;
+  background: linear-gradient(rgba(0, 0, 0, 0.8), transparent);
+  color: white;
+  pointer-events: none;
+}
+
+.video-info h3 {
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-bottom: 4px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.video-info p {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Video Modal Transitions */
+.video-fade-enter-active,
+.video-fade-leave-active {
+  transition: opacity 0.4s ease;
+}
+
+.video-fade-enter-from,
+.video-fade-leave-to {
+  opacity: 0;
 }
 
 /* Band Dropdown */
@@ -1143,6 +1627,14 @@ export default {
   font-size: 0.85rem;
   color: var(--text-muted);
   margin-top: 8px;
+}
+
+.band-description {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-style: italic;
+  margin-top: 4px;
+  opacity: 0.8;
 }
 
 /* Music Platforms */
