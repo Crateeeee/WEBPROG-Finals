@@ -16,31 +16,31 @@
         <!-- Desktop Nav -->
         <ul class="nav-links">
           <li>
-            <router-link to="/" class="nav-link">
+            <router-link to="/" class="nav-link" :class="{ active: isActive('home') }" @click="scrollToTop">
               <span class="nav-icon"><i class="fas fa-home"></i></span>
               <span class="nav-text">Home</span>
             </router-link>
           </li>
           <li>
-            <router-link :to="{ path: '/', hash: '#about' }" class="nav-link">
+            <a href="#about" class="nav-link" :class="{ active: isActive('about') }" @click="scrollToSection('about')">
               <span class="nav-icon"><i class="fas fa-user"></i></span>
               <span class="nav-text">About</span>
-            </router-link>
+            </a>
           </li>
           <li>
-            <router-link to="/music" class="nav-link">
+            <router-link to="/music" class="nav-link" :class="{ active: isActive('music-page') }">
               <span class="nav-icon"><i class="fas fa-music"></i></span>
               <span class="nav-text">Music</span>
             </router-link>
           </li>
           <li>
-            <router-link :to="{ path: '/', hash: '#gallery' }" class="nav-link">
+            <a href="#gallery" class="nav-link" :class="{ active: isActive('gallery') }" @click="scrollToSection('gallery')">
               <span class="nav-icon"><i class="fas fa-images"></i></span>
               <span class="nav-text">Gallery</span>
-            </router-link>
+            </a>
           </li>
           <li>
-            <router-link to="/guestbook" class="nav-link nav-guestbook">
+            <router-link to="/guestbook" class="nav-link nav-guestbook" :class="{ active: isActive('guestbook') }">
               <span class="nav-icon"><i class="fas fa-comments"></i></span>
               <span class="nav-text">Live Chat</span>
               <span class="live-dot"></span>
@@ -68,19 +68,19 @@
         <!-- Mobile Menu -->
         <div class="mobile-menu" :class="{ active: isMobileMenuOpen }">
           <div class="mobile-menu-content">
-            <router-link to="/" @click="closeMobileMenu" class="mobile-link">
+            <a href="#" @click.prevent="closeMobileMenu(); scrollToTop()" class="mobile-link" :class="{ active: isActive('home') }">
               <i class="fas fa-home"></i> Home
-            </router-link>
-            <router-link :to="{ path: '/', hash: '#about' }" @click="closeMobileMenu" class="mobile-link">
+            </a>
+            <a href="#about" @click.prevent="closeMobileMenu(); scrollToSection('about')" class="mobile-link" :class="{ active: isActive('about') }">
               <i class="fas fa-user"></i> About
-            </router-link>
-            <router-link :to="{ path: '/', hash: '#music' }" @click="closeMobileMenu" class="mobile-link">
+            </a>
+            <router-link to="/music" @click="closeMobileMenu" class="mobile-link" :class="{ active: isActive('music-page') }">
               <i class="fas fa-music"></i> Music
             </router-link>
-            <router-link :to="{ path: '/', hash: '#gallery' }" @click="closeMobileMenu" class="mobile-link">
+            <a href="#gallery" @click.prevent="closeMobileMenu(); scrollToSection('gallery')" class="mobile-link" :class="{ active: isActive('gallery') }">
               <i class="fas fa-images"></i> Gallery
-            </router-link>
-            <router-link to="/guestbook" @click="closeMobileMenu" class="mobile-link">
+            </a>
+            <router-link to="/guestbook" @click="closeMobileMenu" class="mobile-link" :class="{ active: isActive('guestbook') }">
               <i class="fas fa-comments"></i> Live Chat
             </router-link>
           </div>
@@ -103,18 +103,75 @@ export default {
   data() {
     return {
       isScrolled: false,
-      isMobileMenuOpen: false
+      isMobileMenuOpen: false,
+      currentSection: 'home'
     }
   },
   mounted() {
     window.addEventListener('scroll', this.handleScroll)
+    this.updateCurrentSection()
   },
   beforeUnmount() {
     window.removeEventListener('scroll', this.handleScroll)
   },
+  watch: {
+    '$route'() {
+      this.updateCurrentSection()
+    }
+  },
   methods: {
     handleScroll() {
       this.isScrolled = window.scrollY > 50
+      // Only update section on home page
+      if (this.$route.path === '/') {
+        this.detectCurrentSection()
+      }
+    },
+    updateCurrentSection() {
+      const path = this.$route.path
+      if (path === '/music') {
+        this.currentSection = 'music-page'
+      } else if (path === '/guestbook') {
+        this.currentSection = 'guestbook'
+      } else if (path === '/') {
+        this.detectCurrentSection()
+      }
+    },
+    detectCurrentSection() {
+      const sections = ['gallery', 'about']
+      const scrollPos = window.scrollY + 200
+      
+      for (const section of sections) {
+        const el = document.getElementById(section)
+        if (el) {
+          const top = el.offsetTop
+          const bottom = top + el.offsetHeight
+          if (scrollPos >= top && scrollPos < bottom) {
+            this.currentSection = section
+            return
+          }
+        }
+      }
+      this.currentSection = 'home'
+    },
+    isActive(section) {
+      return this.currentSection === section
+    },
+    scrollToSection(sectionId) {
+      // If not on home page, go to home first
+      if (this.$route.path !== '/') {
+        this.$router.push({ path: '/', hash: '#' + sectionId })
+      } else {
+        const el = document.getElementById(sectionId)
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth' })
+        }
+      }
+    },
+    scrollToTop() {
+      if (this.$route.path === '/') {
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+      }
     },
     toggleMobileMenu() {
       this.isMobileMenuOpen = !this.isMobileMenuOpen
@@ -251,7 +308,7 @@ export default {
   font-size: 0.85rem;
 }
 
-.nav-link.router-link-active {
+.nav-link.active {
   color: var(--accent-primary);
   background: rgba(139, 92, 246, 0.1);
 }
@@ -390,7 +447,7 @@ export default {
 }
 
 .mobile-link:hover,
-.mobile-link.router-link-active {
+.mobile-link.active {
   color: var(--accent-primary);
 }
 

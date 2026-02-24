@@ -127,7 +127,9 @@ export const musicStore = reactive({
   // Get recommendations based on current track genre
   getRecommendations() {
     const currentGenre = this.currentTrack.genre
-    return this.recommendations.filter(rec => rec.genre === currentGenre)
+    const filtered = this.recommendations.filter(rec => rec.genre === currentGenre)
+    // If no matches, return all recommendations
+    return filtered.length > 0 ? filtered : this.recommendations
   },
   
   // Get all tracks except current
