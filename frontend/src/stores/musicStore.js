@@ -63,7 +63,7 @@ export const musicStore = reactive({
     {
       title: 'The Dark Side of the Moon',
       artist: 'Pink Floyd',
-      cover: 'https://upload.wikimedia.org/wikipedia/en/3/3b/Dark_Side_of_the_Moon.png',
+      cover: '/images/dark-side-moon.jpg',
       genre: 'Progressive Rock',
       spotifyUrl: 'https://open.spotify.com/album/4LH4d3cOWNNsVw41Gqt2kv',
       appleMusicUrl: 'https://music.apple.com/album/the-dark-side-of-the-moon/1065973699'
@@ -71,7 +71,7 @@ export const musicStore = reactive({
     {
       title: 'Lateralus',
       artist: 'Tool',
-      cover: 'https://upload.wikimedia.org/wikipedia/en/e/e9/Tool-lateralus.jpg',
+      cover: 'https://i.scdn.co/image/ab67616d00001e02ed65a55eebc02d95e62a167d',
       genre: 'Progressive Rock',
       spotifyUrl: 'https://open.spotify.com/album/5l5m1hnH4punS1GQXgEi3T',
       appleMusicUrl: 'https://music.apple.com/album/lateralus/1474827158'
@@ -79,7 +79,7 @@ export const musicStore = reactive({
     {
       title: 'Metropolis Pt. 2',
       artist: 'Dream Theater',
-      cover: 'https://upload.wikimedia.org/wikipedia/en/1/11/Dream_Theater_-_Metropolis_Pt._2-_Scenes_from_a_Memory.jpg',
+      cover: 'https://i.scdn.co/image/ab67616d00001e02c0f3a4c48d9fa70f41b99ee4',
       genre: 'Progressive Rock',
       spotifyUrl: 'https://open.spotify.com/album/3g8kKHRTJFfWP2vQ9ZKF9l',
       appleMusicUrl: 'https://music.apple.com/album/metropolis-pt-2-scenes-from-a-memory/1440652917'
@@ -88,7 +88,7 @@ export const musicStore = reactive({
     {
       title: 'Dammit',
       artist: 'Blink-182',
-      cover: 'https://upload.wikimedia.org/wikipedia/en/9/97/Blink-182_-_Dude_Ranch_cover.jpg',
+      cover: 'https://i.scdn.co/image/ab67616d00001e0282c1fe8644c7a9712fb3b651',
       genre: 'Pop Punk',
       spotifyUrl: 'https://open.spotify.com/album/2wTlNgezDlkUlo9Xl0dvLT',
       appleMusicUrl: 'https://music.apple.com/album/dude-ranch/1440839912'
@@ -96,7 +96,7 @@ export const musicStore = reactive({
     {
       title: 'The Middle',
       artist: 'Jimmy Eat World',
-      cover: 'https://upload.wikimedia.org/wikipedia/en/3/38/Jimmy_Eat_World_-_Bleed_American.png',
+      cover: 'https://i.scdn.co/image/ab67616d00001e028665e7c0f670d3e9c3d1a56e',
       genre: 'Pop Punk',
       spotifyUrl: 'https://open.spotify.com/album/0EmK4cHfTkLm4oeJz8cQM4',
       appleMusicUrl: 'https://music.apple.com/album/bleed-american/1440851533'
@@ -104,7 +104,7 @@ export const musicStore = reactive({
     {
       title: 'Sugar, We\'re Goin Down',
       artist: 'Fall Out Boy',
-      cover: 'https://upload.wikimedia.org/wikipedia/en/7/7e/Futct.jpg',
+      cover: 'https://i.scdn.co/image/ab67616d00001e02e3e9e27c11ec8cde54b96888',
       genre: 'Pop Punk',
       spotifyUrl: 'https://open.spotify.com/album/5nkUSlgerBEtiVEjxHIfMR',
       appleMusicUrl: 'https://music.apple.com/album/from-under-the-cork-tree/1440767450'

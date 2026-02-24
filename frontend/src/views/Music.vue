@@ -116,7 +116,10 @@
               class="rec-card"
             >
               <div class="rec-cover">
-                <img :src="rec.cover" :alt="rec.title" />
+                <img :src="rec.cover" :alt="rec.title" @error="handleImageError" />
+                <div class="rec-placeholder">
+                  <i class="fas fa-music"></i>
+                </div>
                 <div class="rec-overlay">
                   <i class="fab fa-spotify"></i>
                 </div>
@@ -176,6 +179,10 @@ export default {
     document.removeEventListener('keydown', this.handleKeyboard)
   },
   methods: {
+    handleImageError(event) {
+      // Hide broken image, show placeholder
+      event.target.style.display = 'none'
+    },
     findAudioElement() {
       // Try to find audio element - it's in the MusicPlayer component
       const checkAudio = setInterval(() => {
@@ -743,12 +750,26 @@ export default {
   aspect-ratio: 1;
   border-radius: var(--radius-sm);
   overflow: hidden;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
 }
 
 .rec-cover img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  position: relative;
+  z-index: 1;
+}
+
+.rec-placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary);
+  font-size: 2rem;
+  opacity: 0.5;
 }
 
 .rec-overlay {
