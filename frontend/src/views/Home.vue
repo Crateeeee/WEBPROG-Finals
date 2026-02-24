@@ -815,6 +815,7 @@ export default {
        * Format: { id: unique_number, src: '/images/photo.jpg', caption: 'Description', category: 'gigs|studio|life', size: 'wide|tall|large' (optional) }
        */
       gallery: [
+        // Original photos
         { id: 1, src: '/images/cms-gig.JPG', caption: 'Cm/S Live Performance', category: 'gigs', size: 'wide' },
         { id: 2, src: '/images/crate-guitar.JPG', caption: 'Crate with guitar', category: 'life', size: 'tall' },
         { id: 3, src: '/images/solo.JPG', caption: 'Solo Project Session', category: 'studio', size: 'large' },
@@ -829,7 +830,30 @@ export default {
         { id: 12, src: '/images/morrissey-yu.jpg', caption: 'Morrissey Yu', category: 'studio' },
         { id: 13, src: '/images/xyze.jpg', caption: '.xyze', category: 'studio' },
         { id: 14, src: '/images/himig.jpg', caption: 'Himig ng Pagtindig', category: 'gigs' },
-        { id: 15, src: '/images/room205.jpg', caption: 'Room 205 Band', category: 'gigs' }
+        { id: 15, src: '/images/room205.jpg', caption: 'Room 205 Band', category: 'gigs' },
+        // New photos added
+        { id: 16, src: '/images/baby-me.jpg', caption: 'Baby Me', category: 'life' },
+        { id: 17, src: '/images/cms-recording-4.jpg', caption: 'Cm/S Recording Session', category: 'studio', size: 'wide' },
+        { id: 18, src: '/images/cms-photo.jpg', caption: 'Cm/S Band Photo', category: 'gigs' },
+        { id: 19, src: '/images/fablewake-apc.png', caption: 'Fablewake at APC', category: 'gigs', size: 'wide' },
+        { id: 20, src: '/images/fablewake-knr-studio.png', caption: 'Fablewake at KNR Studio', category: 'studio', size: 'wide' },
+        { id: 21, src: '/images/ibanez-uv70p.webp', caption: 'Ibanez UV70P', category: 'life' },
+        { id: 22, src: '/images/kings-x-dogman.jpg', caption: "King's X - Dogman", category: 'life' },
+        { id: 23, src: '/images/mows-bar-2.png', caption: "Mow's Bar Gig", category: 'gigs', size: 'wide' },
+        { id: 24, src: '/images/mows-bar.jpg', caption: "Mow's Bar Performance", category: 'gigs' },
+        { id: 25, src: '/images/mows-setup.jpg', caption: "Mow's Bar Setup", category: 'gigs' },
+        { id: 26, src: '/images/olaf-the-cat.jpg', caption: 'Olaf the Cat', category: 'life' },
+        { id: 27, src: '/images/phil-and-rolf.jpg', caption: 'Phil & Rolf', category: 'life' },
+        { id: 28, src: '/images/rga42ex-ibanez.jpeg', caption: 'Ibanez RGA42EX', category: 'life' },
+        { id: 29, src: '/images/social-house.JPG', caption: 'Social House Gig', category: 'gigs', size: 'large' },
+        { id: 30, src: '/images/thank-you-scientist.jpg', caption: 'Thank You Scientist - Stranger Heads Prevail', category: 'life' },
+        { id: 31, src: '/images/alden.jpeg', caption: 'Alden', category: 'life' },
+        { id: 32, src: '/images/bird.jpeg', caption: 'Bird', category: 'life' },
+        { id: 33, src: '/images/her.jpeg', caption: 'Her', category: 'life', size: 'tall' },
+        { id: 34, src: '/images/luh.jpg', caption: 'Luh', category: 'life' },
+        { id: 35, src: '/images/me-and-her.jpeg', caption: 'Me and Her', category: 'life', size: 'wide' },
+        { id: 36, src: '/images/me-and-my-girl.jpeg', caption: 'Me and My Girl', category: 'life', size: 'wide' },
+        { id: 37, src: '/images/spooderman.jpg', caption: 'Spooderman', category: 'life' }
       ],
       // Additional photos from localStorage will be merged in mounted()
       localGalleryAdditions: []
@@ -919,12 +943,12 @@ export default {
       this.showUploadModal = false
     },
     saveLocalAdditions() {
-      // Only save photos that were added locally (id > 15 since defaults are 1-15)
-      const additions = this.gallery.filter(p => p.id > 15)
+      // Only save photos that were added locally (id > 37 since defaults are 1-37)
+      const additions = this.gallery.filter(p => p.id > 37)
       localStorage.setItem('crate-gallery-additions', JSON.stringify(additions))
     },
     deletePhoto(id) {
-      if (id <= 15) {
+      if (id <= 37) {
         alert('Default gallery photos cannot be deleted. Contact admin to update the gallery.')
         return
       }
