@@ -182,6 +182,7 @@ export default {
         const audio = document.querySelector('.music-player audio')
         if (audio) {
           this.audioRef = audio
+          this.volume = Math.round(audio.volume * 100)
           audio.addEventListener('timeupdate', this.updateTime)
           clearInterval(checkAudio)
         }
@@ -267,6 +268,13 @@ export default {
       const mins = Math.floor(seconds / 60)
       const secs = Math.floor(seconds % 60)
       return `${mins}:${secs.toString().padStart(2, '0')}`
+    }
+  },
+  watch: {
+    volume(newVal) {
+      if (this.audioRef) {
+        this.audioRef.volume = newVal / 100
+      }
     }
   }
 }
