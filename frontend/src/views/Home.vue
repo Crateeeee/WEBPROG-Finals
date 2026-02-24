@@ -808,9 +808,31 @@ export default {
         { id: 'studio', name: 'Studio', icon: 'fas fa-microphone' },
         { id: 'life', name: 'Life', icon: 'fas fa-heart' }
       ],
-      // Gallery starts empty - photos are saved to localStorage
-      // Add photos using the "Add Photo" button
-      gallery: []
+      /**
+       * =====================================================
+       * 📸 GALLERY - Add your photos here
+       * =====================================================
+       * Format: { id: unique_number, src: '/images/photo.jpg', caption: 'Description', category: 'gigs|studio|life', size: 'wide|tall|large' (optional) }
+       */
+      gallery: [
+        { id: 1, src: '/images/cms-gig.JPG', caption: 'Cm/S Live Performance', category: 'gigs', size: 'wide' },
+        { id: 2, src: '/images/crate-guitar.JPG', caption: 'Crate with guitar', category: 'life', size: 'tall' },
+        { id: 3, src: '/images/solo.JPG', caption: 'Solo Project Session', category: 'studio', size: 'large' },
+        { id: 4, src: '/images/fablewake.jpg', caption: 'Fablewake', category: 'gigs' },
+        { id: 5, src: '/images/cms.jpg', caption: 'Centimeters Per Second', category: 'gigs' },
+        { id: 6, src: '/images/apc-band.jpg', caption: 'APC Band', category: 'gigs' },
+        { id: 7, src: '/images/arlaux.jpg', caption: 'Arlaux', category: 'studio' },
+        { id: 8, src: '/images/redive.jpg', caption: 'Redive', category: 'gigs' },
+        { id: 9, src: '/images/moonstruck24.jpg', caption: 'Moonstruck 24', category: 'gigs' },
+        { id: 10, src: '/images/earkisses.jpg', caption: 'EarKisses', category: 'gigs' },
+        { id: 11, src: '/images/joaquin-pacete.jpg', caption: 'Joaquin Pacete Band', category: 'gigs' },
+        { id: 12, src: '/images/morrissey-yu.jpg', caption: 'Morrissey Yu', category: 'studio' },
+        { id: 13, src: '/images/xyze.jpg', caption: '.xyze', category: 'studio' },
+        { id: 14, src: '/images/himig.jpg', caption: 'Himig ng Pagtindig', category: 'gigs' },
+        { id: 15, src: '/images/room205.jpg', caption: 'Room 205 Band', category: 'gigs' }
+      ],
+      // Additional photos from localStorage will be merged in mounted()
+      localGalleryAdditions: []
     }
   },
   computed: {
@@ -832,10 +854,11 @@ export default {
     }
   },
   mounted() {
-    // Load saved gallery from localStorage
-    const savedGallery = localStorage.getItem('crate-gallery')
-    if (savedGallery) {
-      this.gallery = JSON.parse(savedGallery)
+    // Load any additional photos from localStorage (added by admin)
+    const savedAdditions = localStorage.getItem('crate-gallery-additions')
+    if (savedAdditions) {
+      const additions = JSON.parse(savedAdditions)
+      this.gallery = [...this.gallery, ...additions]
     }
     
     // Close dropdowns when clicking outside
@@ -889,15 +912,25 @@ export default {
       }
       
       this.gallery.unshift(photo)
-      localStorage.setItem('crate-gallery', JSON.stringify(this.gallery))
+      // Save additions to localStorage (local only - won't sync to other users)
+      this.saveLocalAdditions()
       
       this.newPhoto = { src: '', caption: '', category: 'gigs' }
       this.showUploadModal = false
     },
+    saveLocalAdditions() {
+      // Only save photos that were added locally (id > 15 since defaults are 1-15)
+      const additions = this.gallery.filter(p => p.id > 15)
+      localStorage.setItem('crate-gallery-additions', JSON.stringify(additions))
+    },
     deletePhoto(id) {
+      if (id <= 15) {
+        alert('Default gallery photos cannot be deleted. Contact admin to update the gallery.')
+        return
+      }
       if (confirm('Are you sure you want to delete this photo?')) {
         this.gallery = this.gallery.filter(photo => photo.id !== id)
-        localStorage.setItem('crate-gallery', JSON.stringify(this.gallery))
+        this.saveLocalAdditions()
       }
     },
     
