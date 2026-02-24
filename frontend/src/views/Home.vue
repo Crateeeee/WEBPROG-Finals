@@ -577,7 +577,7 @@ export default {
           role: 'Lead Guitarist',
           genre: 'Progressive Rock',
           image: '/images/fablewake.jpg',
-          youtubeId: 'n0WLBPPVObM&t=759s',      // TODO: Add YouTube video ID (e.g., 'dQw4w9WgXcQ')
+          youtubeId: 'n0WLBPPVObM',      // TODO: Add YouTube video ID (e.g., 'dQw4w9WgXcQ')
           spotify: 'https://open.spotify.com/artist/5pg6uAPBAN2wy2SxCi5fLn',
           appleMusic: 'https://music.apple.com/us/artist/fablewake/1757894350',
           youtube: 'https://www.youtube.com/@fablewakeofficial',
@@ -625,7 +625,7 @@ export default {
           genre: 'Instrumental',
           description: 'Sessionist',
           image: '/images/xyze.jpg',          // TODO: Add your image
-          youtubeId: '99Rk02lMiCI&t=13s',      // TODO: Add YouTube video ID (e.g., 'dQw4w9WgXcQ')
+          youtubeId: '99Rk02lMiCI',      // YouTube video ID
           spotify: 'https://open.spotify.com/artist/2ICGPlKHeUjio0qw8dMTH7',
           appleMusic: 'https://music.apple.com/us/artist/xyze/1773394953',
           youtube: 'https://www.youtube.com/channel/UCWG0McoSm5-kzISwaa_YdJA',
@@ -641,7 +641,7 @@ export default {
           genre: 'Progressive Rock & Instrumental',
           description: 'Thesis Project - Heavenly Ones and Space Mammal',
           image: '/images/morrissey-yu.jpg',  // TODO: Add your image
-          youtubeId: 'Ac3R-_vY3bc&t=',      // TODO: Add YouTube video ID (e.g., 'dQw4w9WgXcQ')
+          youtubeId: 'TmAIqEcJLTY',      // YouTube video ID (extracted from Mix)
           spotify: 'https://open.spotify.com/artist/4mj8OnWW3nTw2LoYRjnOSV',
           appleMusic: 'https://music.apple.com/us/artist/morrissey-yu/1820966291',
           youtube: 'https://www.youtube.com/channel/UCsUq2K7FpxUVaR5XzC2qfAg',
@@ -657,7 +657,7 @@ export default {
           genre: 'Instrumental',
           description: 'Solo Project - Fell in the Pool',
           image: '/images/arlaux.jpg',        // TODO: Add your image
-          youtubeId: 'MARVMyOc1Q0&t=478s',      // TODO: Add YouTube video ID (e.g., 'dQw4w9WgXcQ')
+          youtubeId: 'upNQifCa_Ho',      // YouTube video ID (extracted from Mix)
           spotify: 'https://open.spotify.com/artist/1Qw81opkAUZsl7iuuLBwKr',
           appleMusic: 'https://music.apple.com/us/artist/arlaux/1719632483',
           youtube: 'https://www.youtube.com/@arlauxwav',
