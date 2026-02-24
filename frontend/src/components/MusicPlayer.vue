@@ -114,7 +114,7 @@
       :src="currentTrack.src"
       @timeupdate="updateTime"
       @loadedmetadata="onLoaded"
-      @ended="nextTrack"
+      @ended="onTrackEnded"
       @canplay="onCanPlay"
       @error="onError"
       preload="metadata"
@@ -266,8 +266,33 @@ export default {
       })
     },
     
+    onTrackEnded() {
+      // Handle repeat mode - replay current track
+      if (musicStore.repeatEnabled) {
+        this.$refs.audio.currentTime = 0
+        this.$refs.audio.play()
+        return
+      }
+      
+      // Otherwise go to next track (shuffle handled in nextTrack)
+      this.nextTrack()
+    },
+    
     nextTrack() {
-      this.currentIndex = (this.currentIndex + 1) % this.playlist.length
+      let nextIndex
+      
+      if (musicStore.shuffleEnabled) {
+        // Get a random track that's different from current
+        let randomIndex
+        do {
+          randomIndex = Math.floor(Math.random() * this.playlist.length)
+        } while (randomIndex === this.currentIndex && this.playlist.length > 1)
+        nextIndex = randomIndex
+      } else {
+        nextIndex = (this.currentIndex + 1) % this.playlist.length
+      }
+      
+      this.currentIndex = nextIndex
       this.$nextTick(() => {
         if (this.isPlaying) {
           this.playTrack(this.currentIndex)

@@ -7,6 +7,8 @@ import { reactive } from 'vue'
  */
 export const musicStore = reactive({
   isPlaying: false,
+  shuffleEnabled: false,
+  repeatEnabled: false,
   currentTrack: {
     title: 'Breaking The Waves',
     artist: 'Fablewake',
@@ -122,6 +124,14 @@ export const musicStore = reactive({
   
   setCurrentIndex(index) {
     this.currentIndex = index
+  },
+  
+  toggleShuffle() {
+    this.shuffleEnabled = !this.shuffleEnabled
+  },
+  
+  toggleRepeat() {
+    this.repeatEnabled = !this.repeatEnabled
   },
   
   // Get recommendations based on current track genre

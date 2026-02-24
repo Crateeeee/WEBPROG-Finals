@@ -46,6 +46,12 @@
               <span class="live-dot"></span>
             </router-link>
           </li>
+          <li>
+            <router-link to="/docs" class="nav-link" :class="{ active: isActive('docs') }">
+              <span class="nav-icon"><i class="fas fa-book"></i></span>
+              <span class="nav-text">Docs</span>
+            </router-link>
+          </li>
         </ul>
 
         <!-- Right Actions -->
@@ -82,6 +88,9 @@
             </a>
             <router-link to="/guestbook" @click="closeMobileMenu" class="mobile-link" :class="{ active: isActive('guestbook') }">
               <i class="fas fa-comments"></i> Live Chat
+            </router-link>
+            <router-link to="/docs" @click="closeMobileMenu" class="mobile-link" :class="{ active: isActive('docs') }">
+              <i class="fas fa-book"></i> Docs
             </router-link>
           </div>
         </div>
@@ -133,6 +142,8 @@ export default {
         this.currentSection = 'music-page'
       } else if (path === '/guestbook') {
         this.currentSection = 'guestbook'
+      } else if (path === '/docs') {
+        this.currentSection = 'docs'
       } else if (path === '/') {
         this.detectCurrentSection()
       }

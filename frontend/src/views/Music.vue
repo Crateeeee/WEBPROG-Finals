@@ -147,8 +147,8 @@ export default {
       currentTime: 0,
       volume: 80,
       isMuted: false,
-      shuffleEnabled: false,
-      repeatEnabled: false,
+      shuffleEnabled: false, // Local state synced with store
+      repeatEnabled: false,   // Local state synced with store
       audioRef: null
     }
   },
@@ -174,6 +174,9 @@ export default {
     this.findAudioElement()
     // Handle keyboard shortcuts
     document.addEventListener('keydown', this.handleKeyboard)
+    // Sync shuffle/repeat state from store
+    this.shuffleEnabled = this.musicStore.shuffleEnabled
+    this.repeatEnabled = this.musicStore.repeatEnabled
   },
   beforeUnmount() {
     document.removeEventListener('keydown', this.handleKeyboard)
@@ -246,11 +249,13 @@ export default {
     },
     
     toggleShuffle() {
-      this.shuffleEnabled = !this.shuffleEnabled
+      this.musicStore.toggleShuffle()
+      this.shuffleEnabled = this.musicStore.shuffleEnabled
     },
     
     toggleRepeat() {
-      this.repeatEnabled = !this.repeatEnabled
+      this.musicStore.toggleRepeat()
+      this.repeatEnabled = this.musicStore.repeatEnabled
     },
     
     handleKeyboard(e) {
