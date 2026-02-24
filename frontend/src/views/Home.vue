@@ -54,14 +54,14 @@
           </div>
 
           <div class="hero-visual">
-            <div class="vinyl-container">
-              <div class="vinyl-record">
+            <div class="vinyl-container" :class="{ playing: musicStore.isPlaying }">
+              <div class="vinyl-record" :class="{ spinning: musicStore.isPlaying }">
                 <div class="vinyl-grooves"></div>
                 <div class="vinyl-label">
-                  <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=200&h=200&fit=crop" alt="Profile" />
+                  <img :src="musicStore.currentTrack.cover || 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=200&h=200&fit=crop'" alt="Now Playing" />
                 </div>
               </div>
-              <div class="vinyl-arm"></div>
+              <div class="vinyl-arm" :class="{ active: musicStore.isPlaying }"></div>
             </div>
           </div>
         </div>
@@ -146,7 +146,7 @@
         </div>
 
         <div class="bands-grid">
-          <div v-for="(band, index) in bands" :key="band.name" class="band-card" @click.stop="toggleBandDropdown(index)">
+          <div v-for="(band, index) in bands" :key="band.name" class="band-card" :class="{ 'dropdown-active': activeBandDropdown === index }" @click.stop="toggleBandDropdown(index)">
             <div class="band-image">
               <img :src="band.image" :alt="band.name" />
               <div class="band-overlay">
@@ -184,6 +184,35 @@
                 <a v-if="band.youtubeMusic" :href="band.youtubeMusic" target="_blank" class="dropdown-link youtube-music">
                   <i class="fas fa-music"></i>
                   <span>YouTube Music</span>
+                </a>
+                <!-- Social Links -->
+                <a v-if="band.facebook" :href="band.facebook" target="_blank" class="dropdown-link facebook">
+                  <i class="fab fa-facebook"></i>
+                  <span>Facebook</span>
+                </a>
+                <a v-if="band.instagram" :href="band.instagram" target="_blank" class="dropdown-link instagram">
+                  <i class="fab fa-instagram"></i>
+                  <span>Instagram</span>
+                </a>
+                <a v-if="band.tiktok" :href="band.tiktok" target="_blank" class="dropdown-link tiktok">
+                  <i class="fab fa-tiktok"></i>
+                  <span>TikTok</span>
+                </a>
+              </div>
+              <!-- Videos Section -->
+              <div v-if="band.videos && band.videos.length > 0" class="dropdown-videos">
+                <div class="videos-header">
+                  <i class="fas fa-video"></i> Videos
+                </div>
+                <a 
+                  v-for="(video, vidIndex) in band.videos" 
+                  :key="vidIndex" 
+                  :href="video.url" 
+                  target="_blank" 
+                  class="dropdown-link video"
+                >
+                  <i class="fas fa-play-circle"></i>
+                  <span>{{ video.title }}</span>
                 </a>
               </div>
             </div>
@@ -334,10 +363,13 @@
 </template>
 
 <script>
+import { musicStore } from '../stores/musicStore'
+
 export default {
   name: 'Home',
   data() {
     return {
+      musicStore,
       profileImage: '/images/crate-guitar.JPG',
       activeTab: 'all',
       lightboxOpen: false,
@@ -368,17 +400,33 @@ export default {
        * 🎸 YOUR BANDS - EDIT YOUR BAND INFO HERE
        * =====================================================
        * 
-       * HOW TO UPDATE:
+       * HOW TO ADD A NEW BAND:
+       * Copy one of the band objects below and add it to the array.
        * 
-       * 1. Replace 'YOUR BAND 1 NAME' with your actual band name
-       * 2. Update the role (e.g., 'Lead Guitarist', 'Bassist', etc.)
-       * 3. Update the genre
-       * 4. Replace the image URL with your band's image
-       *    - Put images in /frontend/public/images/
-       *    - Use path like '/images/band1.jpg'
-       * 5. Add your streaming links for each platform
-       * 
-       * IMPORTANT: Leave empty string '' if platform not available
+       * BAND OBJECT STRUCTURE:
+       * {
+       *   name: 'Band Name',              // Your band name
+       *   role: 'Lead Guitarist',         // Your role in the band
+       *   genre: 'Pop Punk',              // Music genre
+       *   image: '/images/band.jpg',      // Put image in /frontend/public/images/
+       *   
+       *   // STREAMING LINKS (leave '' if not available):
+       *   spotify: 'https://...',
+       *   appleMusic: 'https://...',
+       *   youtube: 'https://...',
+       *   youtubeMusic: 'https://...',
+       *   
+       *   // SOCIAL LINKS (leave '' if not available):
+       *   facebook: 'https://...',
+       *   instagram: 'https://...',
+       *   tiktok: 'https://...',
+       *   
+       *   // VIDEOS - Add YouTube video IDs or full URLs:
+       *   videos: [
+       *     { title: 'Music Video', url: 'https://youtube.com/watch?v=...' },
+       *     { title: 'Live Performance', url: 'https://youtube.com/watch?v=...' }
+       *   ]
+       * }
        * =====================================================
        */
       bands: [
@@ -390,7 +438,11 @@ export default {
           spotify: '',
           appleMusic: '',
           youtube: 'https://www.youtube.com/@CentimetersperSecond',
-          youtubeMusic: ''
+          youtubeMusic: '',
+          facebook: '',        // Add Facebook link (e.g., 'https://facebook.com/bandname')
+          instagram: '',       // Add Instagram link (e.g., 'https://instagram.com/bandname')
+          tiktok: '',          // Add TikTok link (e.g., 'https://tiktok.com/@bandname')
+          videos: []           // Add video objects: { title: 'Video Title', url: 'https://...' }
         },
         {
           name: 'Fablewake',
@@ -400,7 +452,11 @@ export default {
           spotify: 'https://open.spotify.com/artist/5pg6uAPBAN2wy2SxCi5fLn',
           appleMusic: 'https://music.apple.com/us/artist/fablewake/1757894350',
           youtube: 'https://www.youtube.com/@fablewakeofficial',
-          youtubeMusic: 'https://music.youtube.com/channel/UCAhrwviTv21ZT5y-NcXAPYg'
+          youtubeMusic: 'https://music.youtube.com/channel/UCAhrwviTv21ZT5y-NcXAPYg',
+          facebook: '',        // Add Facebook link
+          instagram: '',       // Add Instagram link
+          tiktok: '',          // Add TikTok link
+          videos: []           // Add videos here
         },
         {
           name: 'Solo Project',
@@ -410,7 +466,11 @@ export default {
           spotify: '',
           appleMusic: '',
           youtube: 'https://www.youtube.com/@cratemarshall',
-          youtubeMusic: ''
+          youtubeMusic: '',
+          facebook: '',        // Add Facebook link
+          instagram: '',       // Add Instagram link
+          tiktok: '',          // Add TikTok link
+          videos: []           // Add videos here
         }
       ],
       skillCategories: [
@@ -421,7 +481,7 @@ export default {
             { name: 'Vue.js', icon: 'fab fa-vuejs' },
             { name: 'JavaScript', icon: 'fab fa-js' },
             { name: 'HTML/CSS', icon: 'fab fa-html5' },
-            { name: 'Tailwind', icon: 'fas fa-wind' }
+            { name: 'React', icon: 'fab fa-react' }
           ]
         },
         {
@@ -431,16 +491,16 @@ export default {
             { name: 'NestJS', icon: 'fab fa-node-js' },
             { name: 'Node.js', icon: 'fab fa-node' },
             { name: 'Python', icon: 'fab fa-python' },
-            { name: 'PostgreSQL', icon: 'fas fa-database' }
+            { name: 'Supabase', icon: 'fas fa-database' }
           ]
         },
         {
           name: 'Music Production',
           icon: 'fas fa-sliders-h',
           skills: [
-            { name: 'FL Studio', icon: 'fas fa-music' },
-            { name: 'Ableton', icon: 'fas fa-headphones' },
-            { name: 'Pro Tools', icon: 'fas fa-microphone' },
+            { name: 'Logic Pro X', icon: 'fas fa-music' },
+            { name: 'Garageband', icon: 'fas fa-headphones' },
+            { name: 'Neural DSP', icon: 'fas fa-guitar' },
             { name: 'Mixing', icon: 'fas fa-sliders-h' }
           ]
         },
@@ -448,9 +508,9 @@ export default {
           name: 'Tools',
           icon: 'fas fa-tools',
           skills: [
-            { name: 'Git', icon: 'fab fa-git-alt' },
-            { name: 'Docker', icon: 'fab fa-docker' },
-            { name: 'Figma', icon: 'fab fa-figma' },
+            { name: 'Github', icon: 'fab fa-github' },
+            { name: 'Flutter', icon: 'fas fa-mobile-alt' },
+            { name: 'Claude AI', icon: 'fas fa-robot' },
             { name: 'VS Code', icon: 'fas fa-code' }
           ]
         }
@@ -658,10 +718,19 @@ export default {
   border-radius: 50%;
   background: linear-gradient(135deg, #1a1a2e 0%, #0f0f1a 100%);
   position: relative;
-  animation: spin-slow 10s linear infinite;
   box-shadow: 
     0 0 0 10px rgba(139, 92, 246, 0.1),
     0 0 60px rgba(139, 92, 246, 0.3),
+    inset 0 0 80px rgba(0, 0, 0, 0.5);
+  transition: box-shadow 0.3s ease;
+}
+
+/* Spinning animation - only when playing */
+.vinyl-record.spinning {
+  animation: spin-slow 3s linear infinite;
+  box-shadow: 
+    0 0 0 10px rgba(139, 92, 246, 0.2),
+    0 0 80px rgba(139, 92, 246, 0.5),
     inset 0 0 80px rgba(0, 0, 0, 0.5);
 }
 
@@ -705,8 +774,14 @@ export default {
   background: linear-gradient(90deg, #333, #666);
   border-radius: 4px;
   transform-origin: right center;
-  transform: rotate(25deg);
+  transform: rotate(35deg);
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  transition: transform 0.5s ease;
+}
+
+/* Tonearm moves to vinyl when playing */
+.vinyl-arm.active {
+  transform: rotate(20deg);
 }
 
 .vinyl-arm::before {
@@ -884,6 +959,10 @@ export default {
   box-shadow: var(--shadow-glow);
 }
 
+.band-card.dropdown-active {
+  z-index: 50;
+}
+
 .band-image {
   position: relative;
   aspect-ratio: 1;
@@ -1013,11 +1092,36 @@ export default {
 .dropdown-link.apple:hover { color: #fc3c44; }
 .dropdown-link.youtube:hover { color: #FF0000; }
 .dropdown-link.youtube-music:hover { color: #FF0000; }
+.dropdown-link.facebook:hover { color: #1877F2; }
+.dropdown-link.instagram:hover { color: #E4405F; }
+.dropdown-link.tiktok:hover { color: #00f2ea; }
+.dropdown-link.video:hover { color: var(--accent-primary); }
 
 .dropdown-link i {
   font-size: 1.2rem;
   width: 24px;
   text-align: center;
+}
+
+/* Videos Section in Dropdown */
+.dropdown-videos {
+  border-top: 1px solid var(--border-color);
+  padding: 8px;
+}
+
+.videos-header {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 8px 12px 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.videos-header i {
+  color: var(--accent-primary);
 }
 
 .band-info {

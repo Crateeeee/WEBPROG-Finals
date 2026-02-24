@@ -123,6 +123,8 @@
 </template>
 
 <script>
+import { musicStore } from '../stores/musicStore'
+
 export default {
   name: 'MusicPlayer',
   data() {
@@ -350,6 +352,20 @@ export default {
       const mins = Math.floor(seconds / 60)
       const secs = Math.floor(seconds % 60)
       return `${mins}:${secs.toString().padStart(2, '0')}`
+    },
+    
+    // Sync state to global music store
+    syncToStore() {
+      musicStore.setPlaying(this.isPlaying)
+      musicStore.setCurrentTrack(this.currentTrack)
+    }
+  },
+  watch: {
+    isPlaying() {
+      this.syncToStore()
+    },
+    currentIndex() {
+      this.syncToStore()
     }
   },
   mounted() {
@@ -357,6 +373,23 @@ export default {
     if (this.$refs.audio) {
       this.$refs.audio.volume = this.volume / 100
     }
+    // Sync initial state to store
+    this.syncToStore()
+    
+    // Listen for events from Music page
+    window.addEventListener('music-toggle-play', this.togglePlay)
+    window.addEventListener('music-next-track', this.nextTrack)
+    window.addEventListener('music-prev-track', this.prevTrack)
+    window.addEventListener('music-play-track', (e) => {
+      this.playTrack(e.detail.index)
+    })
+  },
+  beforeUnmount() {
+    // Clean up event listeners
+    window.removeEventListener('music-toggle-play', this.togglePlay)
+    window.removeEventListener('music-next-track', this.nextTrack)
+    window.removeEventListener('music-prev-track', this.prevTrack)
+    window.removeEventListener('music-play-track', this.playTrack)
   }
 }
 </script>

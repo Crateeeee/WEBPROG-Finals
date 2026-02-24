@@ -43,8 +43,8 @@
             <a href="https://linkedin.com" target="_blank" rel="noopener" class="social-link" title="LinkedIn">
               <i class="fab fa-linkedin-in"></i>
             </a>
-            <a href="https://spotify.com" target="_blank" rel="noopener" class="social-link" title="Spotify">
-              <i class="fab fa-spotify"></i>
+            <a href="https://facebook.com" target="_blank" rel="noopener" class="social-link" title="Facebook">
+              <i class="fab fa-facebook"></i>
             </a>
             <a href="https://instagram.com" target="_blank" rel="noopener" class="social-link" title="Instagram">
               <i class="fab fa-instagram"></i>
@@ -70,14 +70,14 @@
           <h4 class="footer-title">Currently Vibing</h4>
           <div class="now-playing">
             <div class="now-playing-art">
-              <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=80&h=80&fit=crop" alt="Album art" />
-              <div class="playing-indicator">
+              <img :src="musicStore.currentTrack.cover || 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=80&h=80&fit=crop'" alt="Album art" />
+              <div class="playing-indicator" :class="{ active: musicStore.isPlaying }">
                 <span></span><span></span><span></span>
               </div>
             </div>
             <div class="now-playing-info">
-              <span class="now-playing-title">Sample Track</span>
-              <span class="now-playing-artist">Crate Studio</span>
+              <span class="now-playing-title">{{ musicStore.currentTrack.title || 'Sample Track' }}</span>
+              <span class="now-playing-artist">{{ musicStore.currentTrack.artist || 'Crate Studio' }}</span>
             </div>
           </div>
         </div>
@@ -100,8 +100,15 @@
 </template>
 
 <script>
+import { musicStore } from '../stores/musicStore'
+
 export default {
   name: 'Footer',
+  data() {
+    return {
+      musicStore
+    }
+  },
   computed: {
     currentYear() {
       return new Date().getFullYear()
@@ -328,12 +335,21 @@ export default {
   background: rgba(0, 0, 0, 0.6);
   padding: 3px;
   border-radius: 3px;
+  opacity: 0.5;
+  transition: opacity 0.3s ease;
+}
+
+.playing-indicator.active {
+  opacity: 1;
 }
 
 .playing-indicator span {
   width: 3px;
   background: var(--accent-green);
   border-radius: 1px;
+}
+
+.playing-indicator.active span {
   animation: equalizer 0.8s ease infinite;
 }
 

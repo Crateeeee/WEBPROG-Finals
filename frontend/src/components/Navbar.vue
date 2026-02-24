@@ -28,7 +28,7 @@
             </router-link>
           </li>
           <li>
-            <router-link :to="{ path: '/', hash: '#music' }" class="nav-link">
+            <router-link to="/music" class="nav-link">
               <span class="nav-icon"><i class="fas fa-music"></i></span>
               <span class="nav-text">Music</span>
             </router-link>
